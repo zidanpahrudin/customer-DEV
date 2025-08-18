@@ -43,22 +43,19 @@ func ConnectDatabase() {
 
 	fmt.Println("Starting auto migration...")
 
-	// Drop semua tabel yang bermasalah untuk memastikan skema bersih
-	// Drop tabel dengan foreign key terlebih dahulu
-	DB.Migrator().DropTable(&entity.Status{})     // Tambahkan ini
-	DB.Migrator().DropTable(&entity.Payment{})    // Tambahkan ini
-	DB.Migrator().DropTable(&entity.Invoice{})    // Tambahkan ini
-	DB.Migrator().DropTable(&entity.ActivityCheckin{})
-	DB.Migrator().DropTable(&entity.ActivityAttendee{})
-	DB.Migrator().DropTable(&entity.Activity{})
-	DB.Migrator().DropTable(&entity.User{})
-	DB.Migrator().DropTable(&entity.Address{})
-	DB.Migrator().DropTable(&entity.Sosmed{})
-	DB.Migrator().DropTable(&entity.Contact{})
-	DB.Migrator().DropTable(&entity.Structure{})
-	DB.Migrator().DropTable(&entity.Other{})
-	DB.Migrator().DropTable(&entity.Customer{})
-	DB.Migrator().DropTable(&entity.Role{})
+	// HAPUS SEMUA BARIS DropTable BERIKUT INI:
+	// DB.Migrator().DropTable(&entity.ActivityCheckin{})
+	// DB.Migrator().DropTable(&entity.ActivityAttendee{})
+	// DB.Migrator().DropTable(&entity.Activity{})
+	// DB.Migrator().DropTable(&entity.User{})
+	// ... dst (semua sudah dikomentari dengan benar)
+	// DB.Migrator().DropTable(&entity.Address{})
+	// DB.Migrator().DropTable(&entity.Sosmed{})
+	// DB.Migrator().DropTable(&entity.Contact{})
+	// DB.Migrator().DropTable(&entity.Structure{})
+	// DB.Migrator().DropTable(&entity.Other{})
+	// DB.Migrator().DropTable(&entity.Customer{})
+	// DB.Migrator().DropTable(&entity.Role{})
 
 	// Auto migrate the schema - akan membuat tabel sesuai model Go
 	err = DB.AutoMigrate(
@@ -76,7 +73,7 @@ func ConnectDatabase() {
 		&entity.ActivityAttendee{},
 		&entity.Invoice{},
 		&entity.Payment{},
-		&entity.Status{}, // Status harus setelah Customer
+		&entity.Status{},
 	)
 	if err != nil {
 		log.Fatal("Failed to migrate database:", err)
