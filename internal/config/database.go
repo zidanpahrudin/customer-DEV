@@ -45,20 +45,22 @@ func ConnectDatabase() {
 
 	// Drop semua tabel yang bermasalah untuk memastikan skema bersih
 	// Drop tabel dengan foreign key terlebih dahulu
-	DB.Migrator().DropTable(&entity.Status{})     // Tambahkan ini
-	DB.Migrator().DropTable(&entity.Payment{})    // Tambahkan ini
-	DB.Migrator().DropTable(&entity.Invoice{})    // Tambahkan ini
-	DB.Migrator().DropTable(&entity.ActivityCheckin{})
-	DB.Migrator().DropTable(&entity.ActivityAttendee{})
-	DB.Migrator().DropTable(&entity.Activity{})
-	DB.Migrator().DropTable(&entity.User{})
-	DB.Migrator().DropTable(&entity.Address{})
-	DB.Migrator().DropTable(&entity.Sosmed{})
-	DB.Migrator().DropTable(&entity.Contact{})
-	DB.Migrator().DropTable(&entity.Structure{})
-	DB.Migrator().DropTable(&entity.Other{})
-	DB.Migrator().DropTable(&entity.Customer{})
-	DB.Migrator().DropTable(&entity.Role{})
+	if(os.Getenv("IS_PRODUCTION") == false) {
+		DB.Migrator().DropTable(&entity.Status{})     // Tambahkan ini
+		DB.Migrator().DropTable(&entity.Payment{})    // Tambahkan ini
+		DB.Migrator().DropTable(&entity.Invoice{})    // Tambahkan ini
+		DB.Migrator().DropTable(&entity.ActivityCheckin{})
+		DB.Migrator().DropTable(&entity.ActivityAttendee{})
+		DB.Migrator().DropTable(&entity.Activity{})
+		DB.Migrator().DropTable(&entity.User{})
+		DB.Migrator().DropTable(&entity.Address{})
+		DB.Migrator().DropTable(&entity.Sosmed{})
+		DB.Migrator().DropTable(&entity.Contact{})
+		DB.Migrator().DropTable(&entity.Structure{})
+		DB.Migrator().DropTable(&entity.Other{})
+		DB.Migrator().DropTable(&entity.Customer{})
+		DB.Migrator().DropTable(&entity.Role{})
+	}
 
 	// Auto migrate the schema - akan membuat tabel sesuai model Go
 	err = DB.AutoMigrate(
