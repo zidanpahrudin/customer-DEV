@@ -50,6 +50,7 @@ type Customer struct {
 	Website          string         `json:"website"`
 	Description      string         `json:"description"`
 	Logo             string         `json:"logo"`
+	LogoSmall        string         `json:"logo_small"` // Field baru untuk logo kecil
 	Status           string         `json:"status" gorm:"default:'Active'"` // Status internal
 	Category         string         `json:"category"`
 	Rating           float64        `json:"rating" gorm:"default:0"`

@@ -71,6 +71,7 @@ type Customer struct {
 	Phone       string  `json:"phone" example:"021-12345678"`
 	Website     string  `json:"website" example:"https://teknologimaju.com"`
 	Description string  `json:"description" example:"Perusahaan teknologi informasi"`
+	LogoSmall   string  `json:"logo_small" example:"uploads/logos_small/logo_small_1.png"` // Field baru untuk logo kecil
 	Status      string  `json:"status" example:"Active"`
 	Category    string  `json:"category" example:"Technology"`
 	Rating      float64 `json:"rating" example:"4.5"`
@@ -87,6 +88,7 @@ type CreateCustomerRequest struct {
 	Code             string                   `json:"code"`
 	AccountManagerId string                   `json:"accountManagerId"` // Ubah dari account_manager_id ke accountManagerId
 	Logo             *string                  `json:"logo"`
+	LogoSmall        *string                  `json:"logoSmall"` // Field baru untuk logo kecil
 	StatusName       string                   `json:"status_name"`
 	Addresses        []CreateAddressRequest   `json:"addresses,omitempty"`
 	Socials          []CreateSocialRequest    `json:"socials,omitempty"`

@@ -181,17 +181,24 @@ func CreateCustomer(c *gin.Context) {
 		}
 	}()
 
-	// Create customer
+	// Di dalam fungsi CreateCustomer, tambahkan setelah Logo assignment:
+	// Create customer entity
 	customer := entity.Customer{
 		Name:             req.Name,
 		BrandName:        req.BrandName,
 		Code:             req.Code,
 		AccountManagerId: req.AccountManagerId,
-		Status:           req.StatusName, // Gunakan req.StatusName dari request body
+		Status:           "Active", // Default status
 	}
 
+	// Set logo if provided
 	if req.Logo != nil {
 		customer.Logo = *req.Logo
+	}
+
+	// Set logo_small if provided
+	if req.LogoSmall != nil {
+		customer.LogoSmall = *req.LogoSmall
 	}
 
 	if err := tx.Create(&customer).Error; err != nil {
@@ -435,5 +442,70 @@ func UploadCustomerLogo(c *gin.Context) {
 		"message":   "Logo uploaded successfully",
 		"logo_path": logoPath,
 		"customer":  customer,
+	})
+}
+
+// @Summary Upload customer logo small
+// @Description Upload a small logo/icon for customer (PNG, SVG, JPG)
+// @Tags Customers
+// @Accept multipart/form-data
+// @Produce json
+// @Security BearerAuth
+// @Param id path int true "Customer ID"
+// @Param logo_small formData file true "Logo small file (PNG, SVG, JPG)"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} dto.ErrorResponse
+// @Failure 404 {object} dto.ErrorResponse
+// @Failure 500 {object} dto.ErrorResponse
+// @Router /api/customers/{id}/logo-small [post]
+func UploadCustomerLogoSmall(c *gin.Context) {
+	id := c.Param("id")
+
+	// Check if customer exists
+	var customer entity.Customer
+	result := config.DB.First(&customer, id)
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Customer not found"})
+		return
+	}
+
+	// Get uploaded file
+	file, err := c.FormFile("logo_small")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No file uploaded"})
+		return
+	}
+
+	// Validate file extension
+	ext := strings.ToLower(filepath.Ext(file.Filename))
+	if ext != ".jpg" && ext != ".jpeg" && ext != ".png" && ext != ".svg" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Only JPG, PNG, and SVG files are allowed"})
+		return
+	}
+
+	// Validate file size (max 2MB for small logos)
+	if file.Size > 2*1024*1024 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "File size must be less than 2MB"})
+		return
+	}
+
+	// Generate unique filename
+	filename := "logo_small_" + id + "_" + time.Now().Format("20060102150405") + ext
+	logoSmallPath := "uploads/logos_small/" + filename
+
+	// Save file
+	if err := c.SaveUploadedFile(file, logoSmallPath); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save file"})
+		return
+	}
+
+	// Update customer logo_small path
+	customer.LogoSmall = logoSmallPath
+	config.DB.Save(&customer)
+
+	c.JSON(http.StatusOK, gin.H{
+		"message":         "Logo small uploaded successfully",
+		"logo_small_path": logoSmallPath,
+		"customer":        customer,
 	})
 }
