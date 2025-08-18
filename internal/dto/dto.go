@@ -98,7 +98,7 @@ type CreateCustomerRequest struct {
 
 // CreateAddressRequest represents address creation in customer request
 type CreateAddressRequest struct {
-	CustomerID uint   `json:"customer_id" binding:"required"`
+	// CustomerID uint   `json:"customer_id" binding:"required"` // Hapus field ini
 	Name       string `json:"name" binding:"required" example:"Head Office"`
 	Address    string `json:"address" binding:"required" example:"Jl. Sudirman No. 123, Jakarta Selatan"`
 	IsMain     bool   `json:"isMain" example:"true"`
@@ -107,7 +107,7 @@ type CreateAddressRequest struct {
 
 // CreateSocialRequest represents social media creation in customer request
 type CreateSocialRequest struct {
-	Name     string `json:"name" binding:"required" example:"Instagram"`
+	// Name     string `json:"name" binding:"required" example:"Instagram"` // Hapus field ini karena duplikat dengan Platform
 	Platform string `json:"platform" binding:"required" example:"Instagram"`
 	Handle   string `json:"handle" binding:"required" example:"@digiinno_id"`
 	Active   bool   `json:"active" example:"true"`
@@ -115,7 +115,7 @@ type CreateSocialRequest struct {
 
 // CreateContactRequest represents contact creation in customer request
 type CreateContactRequest struct {
-	CustomerID  uint   `json:"customer_id" binding:"required"`
+	// CustomerID  uint   `json:"customer_id" binding:"required"` // Hapus field ini
 	Name        string `json:"name" binding:"required" example:"Budi Santoso"`
 	Birthdate   string `json:"birthdate" example:"1985-03-15"`
 	JobPosition string `json:"jobPosition" example:"CEO"`
@@ -128,7 +128,7 @@ type CreateContactRequest struct {
 
 // CreateStructureRequest represents structure creation in customer request
 type CreateStructureRequest struct {
-	CustomerID uint    `json:"customer_id" binding:"required"`
+	// CustomerID uint    `json:"customer_id" binding:"required"` // Hapus field ini
 	TempKey    string  `json:"tempKey" example:"1"`
 	ParentKey  *string `json:"parentKey" example:"null"`
 	Name       string  `json:"name" binding:"required" example:"Board of Directors"`
@@ -147,7 +147,7 @@ type CreateGroupsRequest struct {
 
 // CreateOtherRequest represents other attributes in customer request
 type CreateOtherRequest struct {
-	CustomerID uint    `json:"customer_id" binding:"required"`
+	// CustomerID uint    `json:"customer_id" binding:"required"` // Hapus field ini
 	Key        string  `json:"key" binding:"required" example:"company_size"`
 	Value      *string `json:"value" example:"50-100 employees"`
 	Active     bool    `json:"active" example:"true"`
