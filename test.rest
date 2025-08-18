@@ -1,0 +1,925 @@
+### Register Admin User
+POST http://localhost:9000/register
+Content-Type: application/json
+
+{
+    "email": "admin@example.com",
+    "username": "admin",
+    "password": "admin123",
+    "role_id": 1
+}
+
+### Register Regular User
+POST http://localhost:9000/register
+Content-Type: application/json
+
+{
+    "email": "user@example.com",
+    "username": "regularuser",
+    "password": "user123",
+    "role_id": 2
+}
+
+### Login as Admin
+POST http://localhost:9000/login
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "admin123"
+}
+
+@admin_token = {{login_response.response.body.token}}
+
+### Login as Regular User
+POST http://localhost:9000/login
+Content-Type: application/json
+
+{
+    "username": "regularuser",
+    "password": "user123"
+}
+
+### Test Role Management - Admin Only
+GET http://localhost:9000/api/roles
+Authorization: Bearer {{admin_token}}
+
+@user_token = {{login_response.response.body.token}}
+
+### Test Admin Access - Should Work
+GET http://localhost:9000/api/customers
+Authorization: Bearer {{admin_token}}
+
+### Test Regular User Access - Should Fail (403 Forbidden)
+GET http://localhost:9000/api/customers
+Authorization: Bearer {{user_token}}
+
+
+
+### Create Customer
+POST http://localhost:8080/api/customers
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "name": "PT Digital Inovasi Indonesia",
+  "brandName": "DigiInno",
+  "code": "DIGI",
+  "accountManagerId": "AM-001",
+  "logo": null,
+  "addresses": [
+    {
+      "name": "Head Office",
+      "address": "Jl. Sudirman No. 123, Jakarta Selatan",
+      "isMain": true,
+      "active": true
+    },
+    {
+      "name": "Branch Office",
+      "address": "Jl. Asia Afrika No. 45, Bandung",
+      "isMain": false,
+      "active": true
+    }
+  ],
+  "socials": [
+    {
+      "platform": "Instagram",
+      "handle": "@digiinno_id",
+      "active": true
+    },
+    {
+      "platform": "LinkedIn",
+      "handle": "digital-inovasi-indonesia",
+      "active": true
+    }
+  ],
+  "contacts": [
+    {
+      "name": "Budi Santoso",
+      "birthdate": "1985-03-15",
+      "jobPosition": "CEO",
+      "email": "budi@digiinno.com",
+      "phone": "021-5551234",
+      "mobile": "0812-3456-7890",
+      "isMain": true,
+      "active": true
+    },
+    {
+      "name": "Sari Dewi",
+      "birthdate": "1988-07-22",
+      "jobPosition": "CTO",
+      "email": "sari@digiinno.com",
+      "phone": "021-5551235",
+      "mobile": "0813-4567-8901",
+      "isMain": false,
+      "active": true
+    }
+  ],
+  "structures": [
+    {
+      "tempKey": "1",
+      "parentKey": null,
+      "name": "Board of Directors",
+      "level": 1,
+      "address": "Jakarta",
+      "active": true
+    },
+    {
+      "tempKey": "2",
+      "parentKey": "1",
+      "name": "Technology Division",
+      "level": 2,
+      "address": "Jakarta",
+      "active": true
+    }
+  ],
+  "groups": {
+    "industryId": "1",
+    "industryActive": true,
+    "parentGroupId": "2",
+    "parentGroupActive": true
+  },
+  "others": [
+    {
+      "key": "company_size",
+      "value": "50-100 employees",
+      "active": true
+    },
+    {
+      "key": "established_year",
+      "value": "2015",
+      "active": true
+    }
+  ]
+}
+
+### Get All Suppliers
+GET http://localhost:8080/api/customers
+Authorization: Bearer {{auth_token}}
+
+### Get Supplier by ID
+GET http://localhost:8080/api/customers/1
+Authorization: Bearer {{admin_token}}
+
+### Update Supplier
+PUT http://localhost:8080/api/customers/1
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+    "email": "info@teknologimaju.com",
+    "phone": "021-12345678",
+    "website": "https://teknologimaju.com",
+    "description": "Perusahaan teknologi informasi terdepan - Updated",
+    "status": "active",
+    "category": "Technology",
+    "rating": 4.9,
+    "average_cost": 55000000
+}
+
+### Delete Supplier
+DELETE http://localhost:8080/api/suppliers/1
+Authorization: Bearer {{auth_token}}
+
+### Get Suppliers with Status Filter
+GET http://localhost:8080/api/suppliers?status=Active
+Authorization: Bearer {{auth_token}}
+
+### Upload Supplier Logo
+POST http://localhost:8080/api/suppliers/1/logo
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data
+
+# Attach logo file with key "logo"
+
+### Create Address for Supplier
+POST http://localhost:8080/api/suppliers/1/addresses
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+    "name": "Kantor Pusat",
+    "address": "Jl. Sudirman No. 123, Jakarta Pusat",
+    "main": true
+}
+
+### Create Sosmed for Supplier
+POST http://localhost:8080/api/suppliers/1/sosmeds
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+    "name": "Instagram",
+    "address": "@setroom_indonesia",
+    "active": true
+}
+
+### Create Another Sosmed for Supplier
+POST http://localhost:8080/api/suppliers/1/sosmeds
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+    "name": "Facebook",
+    "address": "https://facebook.com/setroom.indonesia",
+    "active": true
+}
+
+### Create Twitter Sosmed
+POST http://localhost:8080/api/suppliers/1/sosmeds
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+    "name": "Twitter",
+    "address": "@setroom_id",
+    "active": false
+}
+
+### Get All Sosmeds for Supplier
+GET http://localhost:8080/api/suppliers/1/sosmeds
+Authorization: Bearer {{auth_token}}
+
+### Get Supplier with Sosmeds
+GET http://localhost:8080/api/suppliers/1/with-sosmeds
+Authorization: Bearer {{auth_token}}
+
+### Get Supplier with All Relations (Addresses + Sosmeds)
+GET http://localhost:8080/api/suppliers/1/with-all
+Authorization: Bearer {{auth_token}}
+
+### Get Sosmed by ID
+GET http://localhost:8080/api/sosmeds/1
+Authorization: Bearer {{auth_token}}
+
+### Update Sosmed
+PUT http://localhost:8080/api/sosmeds/1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+    "name": "Instagram",
+    "address": "@setroom_official",
+    "active": true
+}
+
+### Delete Sosmed
+DELETE http://localhost:8080/api/sosmeds/1
+Authorization: Bearer {{auth_token}}
+
+
+### Get Structures by Level (Level 2 only)
+GET http://localhost:8080/api/suppliers/1/structures/by-level?level=2
+Authorization: Bearer {{auth_token}}
+
+### Get Supplier with Structures
+GET http://localhost:8080/api/suppliers/1/with-structures
+Authorization: Bearer {{auth_token}}
+
+### Get Supplier Full (All Relations: Addresses + Sosmeds + Contacts + Structures)
+GET http://localhost:8080/api/suppliers/1/full
+Authorization: Bearer {{auth_token}}
+
+### Get Structure by ID
+GET http://localhost:8080/api/structures/1
+Authorization: Bearer {{auth_token}}
+
+
+### ========== STRUCTURE MANAGEMENT ==========
+
+### Create Structure Level 1 - CEO
+POST http://localhost:9000/api/customers/1/structures
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Chief Executive Officer",
+    "level": 1,
+    "position": 1
+}
+
+### Create Structure Level 1 - Board of Directors
+POST http://localhost:9000/api/customers/1/structures
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Board of Directors",
+    "level": 1,
+    "position": 2
+}
+
+### Create Structure Level 2 - CTO (under CEO)
+POST http://localhost:9000/api/customers/1/structures
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Chief Technology Officer",
+    "level": 2,
+    "parent_id": 1,
+    "position": 1
+}
+
+### Create Structure Level 2 - CFO (under CEO)
+POST http://localhost:9000/api/customers/1/structures
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Chief Financial Officer",
+    "level": 2,
+    "parent_id": 1,
+    "position": 2
+}
+
+### Create Structure Level 2 - COO (under CEO)
+POST http://localhost:9000/api/customers/1/structures
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Chief Operating Officer",
+    "level": 2,
+    "parent_id": 1,
+    "position": 3
+}
+
+### Create Structure Level 3 - IT Manager (under CTO)
+POST http://localhost:9000/api/customers/1/structures
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "IT Manager",
+    "level": 3,
+    "parent_id": 3,
+    "position": 1
+}
+
+### Create Structure Level 3 - Software Development Manager (under CTO)
+POST http://localhost:9000/api/customers/1/structures
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Software Development Manager",
+    "level": 3,
+    "parent_id": 3,
+    "position": 2
+}
+
+### Create Structure Level 3 - Finance Manager (under CFO)
+POST http://localhost:9000/api/customers/1/structures
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Finance Manager",
+    "level": 3,
+    "parent_id": 4,
+    "position": 1
+}
+
+### Create Structure Level 3 - Accounting Manager (under CFO)
+POST http://localhost:9000/api/customers/1/structures
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Accounting Manager",
+    "level": 3,
+    "parent_id": 4,
+    "position": 2
+}
+
+### Create Structure Level 3 - Operations Manager (under COO)
+POST http://localhost:9000/api/customers/1/structures
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Operations Manager",
+    "level": 3,
+    "parent_id": 5,
+    "position": 1
+}
+
+### Create Structure Level 4 - Senior Developer (under Software Dev Manager)
+POST http://localhost:9000/api/customers/1/structures
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Senior Developer",
+    "level": 4,
+    "parent_id": 7,
+    "position": 1
+}
+
+### Create Structure Level 4 - Junior Developer (under Software Dev Manager)
+POST http://localhost:9000/api/customers/1/structures
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Junior Developer",
+    "level": 4,
+    "parent_id": 7,
+    "position": 2
+}
+
+### ========== STRUCTURE OPERATIONS ==========
+
+### Get All Structures for Customer
+GET http://localhost:9000/api/customers/1/structures
+Authorization: Bearer {{admin_token}}
+
+### Get Structures by Level (Level 2 only)
+GET http://localhost:9000/api/customers/1/structures/by-level?level=2
+Authorization: Bearer {{admin_token}}
+
+### Get Structures by Level (Level 3 only)
+GET http://localhost:9000/api/customers/1/structures/by-level?level=3
+Authorization: Bearer {{admin_token}}
+
+### Get Structure by ID (with Parent and Children)
+GET http://localhost:9000/api/structures/1
+Authorization: Bearer {{admin_token}}
+
+### Get Customer with Structures
+GET http://localhost:9000/api/customers/1/with-structures
+Authorization: Bearer {{admin_token}}
+
+### Get Customer Full (All Relations including Structures)
+GET http://localhost:9000/api/customers/1/full
+Authorization: Bearer {{admin_token}}
+
+### Update Structure
+PUT http://localhost:9000/api/structures/1
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Chief Executive Officer - Updated",
+    "level": 1,
+    "position": 1
+}
+
+### Delete Structure
+DELETE http://localhost:9000/api/structures/1
+Authorization: Bearer {{admin_token}}
+
+
+### ========== CONTACT MANAGEMENT ==========
+
+### Create Contact - Main Contact Person (CEO)
+POST http://localhost:9000/api/customers/1/contacts
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Budi Santoso",
+    "position": "Chief Executive Officer",
+    "email": "budi.santoso@teknologimaju.com",
+    "phone": "021-12345678",
+    "department": "Executive",
+    "main": true
+}
+
+### Create Contact - CTO
+POST http://localhost:9000/api/customers/1/contacts
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Sari Dewi",
+    "position": "Chief Technology Officer",
+    "email": "sari.dewi@teknologimaju.com",
+    "phone": "021-12345679",
+    "department": "Technology",
+    "main": false
+}
+
+### Create Contact - Sales Manager
+POST http://localhost:9000/api/customers/1/contacts
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Ahmad Rahman",
+    "position": "Sales Manager",
+    "email": "ahmad.rahman@teknologimaju.com",
+    "phone": "021-12345680",
+    "department": "Sales & Marketing",
+    "main": false
+}
+
+### Create Contact - Finance Manager
+POST http://localhost:9000/api/customers/1/contacts
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Linda Wijaya",
+    "position": "Finance Manager",
+    "email": "linda.wijaya@teknologimaju.com",
+    "phone": "021-12345681",
+    "department": "Finance",
+    "main": false
+}
+
+### Create Contact - HR Manager
+POST http://localhost:9000/api/customers/1/contacts
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Rudi Hartono",
+    "position": "Human Resources Manager",
+    "email": "rudi.hartono@teknologimaju.com",
+    "phone": "021-12345682",
+    "department": "Human Resources",
+    "main": false
+}
+
+### Create Contact - Project Manager
+POST http://localhost:9000/api/customers/1/contacts
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Maya Sari",
+    "position": "Project Manager",
+    "email": "maya.sari@teknologimaju.com",
+    "phone": "021-12345683",
+    "department": "Project Management",
+    "main": false
+}
+
+### Create Contact - Customer Service Lead
+POST http://localhost:9000/api/customers/1/contacts
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Andi Pratama",
+    "position": "Customer Service Lead",
+    "email": "andi.pratama@teknologimaju.com",
+    "phone": "021-12345684",
+    "department": "Customer Service",
+    "main": false
+}
+
+### Create Contact - IT Support Manager
+POST http://localhost:9000/api/customers/1/contacts
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Desi Rahayu",
+    "position": "IT Support Manager",
+    "email": "desi.rahayu@teknologimaju.com",
+    "phone": "021-12345685",
+    "department": "IT Support",
+    "main": false
+}
+
+### Create Contact - Business Development
+POST http://localhost:9000/api/customers/1/contacts
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Hendra Kusuma",
+    "position": "Business Development Manager",
+    "email": "hendra.kusuma@teknologimaju.com",
+    "phone": "021-12345686",
+    "department": "Business Development",
+    "main": false
+}
+
+### Create Contact - Quality Assurance Lead
+POST http://localhost:9000/api/customers/1/contacts
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Fitri Handayani",
+    "position": "Quality Assurance Lead",
+    "email": "fitri.handayani@teknologimaju.com",
+    "phone": "021-12345687",
+    "department": "Quality Assurance",
+    "main": false
+}
+
+### ========== CONTACT OPERATIONS ==========
+
+### Get All Contacts for Customer
+GET http://localhost:9000/api/customers/1/contacts
+Authorization: Bearer {{admin_token}}
+
+### Get Contact by ID
+GET http://localhost:9000/api/contacts/1
+Authorization: Bearer {{admin_token}}
+
+### Get Customer with Contacts
+GET http://localhost:9000/api/customers/1/with-contacts
+Authorization: Bearer {{admin_token}}
+
+### Update Contact
+PUT http://localhost:9000/api/contacts/1
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "Budi Santoso",
+    "position": "Chief Executive Officer - Updated",
+    "email": "budi.santoso@teknologimaju.com",
+    "phone": "021-12345678",
+    "department": "Executive",
+    "main": true
+}
+
+### Delete Contact
+DELETE http://localhost:9000/api/contacts/1
+Authorization: Bearer {{admin_token}}
+
+### ========== INVOICE ENDPOINTS ==========
+
+### Create Invoice
+POST http://localhost:9000/api/invoices
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "customer_id": 1,
+    "project_id": "PRJ-2024-001",
+    "invoice_number": "INV-2024-001",
+    "amount": 5000000,
+    "issued_date": "2024-01-15T00:00:00Z",
+    "due_date": "2024-02-15T00:00:00Z",
+    "paid_amount": 0
+}
+
+### Get All Invoices
+GET http://localhost:9000/api/invoices
+Authorization: Bearer {{admin_token}}
+
+### Get All Invoices with Pagination
+GET http://localhost:9000/api/invoices?page=1&limit=10
+Authorization: Bearer {{admin_token}}
+
+### Get Invoices by Customer ID
+GET http://localhost:9000/api/invoices?customer_id=1
+Authorization: Bearer {{admin_token}}
+
+### Get Invoices by Status
+GET http://localhost:9000/api/invoices?status=unpaid
+Authorization: Bearer {{admin_token}}
+
+### Get Paid Invoices
+GET http://localhost:9000/api/invoices?status=paid
+Authorization: Bearer {{admin_token}}
+
+### Get Partial Paid Invoices
+GET http://localhost:9000/api/invoices?status=partial
+Authorization: Bearer {{admin_token}}
+
+### Get Single Invoice
+GET http://localhost:9000/api/invoices/1
+Authorization: Bearer {{admin_token}}
+
+### Update Invoice
+PUT http://localhost:9000/api/invoices/1
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "project_id": "PRJ-2024-001-UPDATED",
+    "invoice_number": "INV-2024-001-UPDATED",
+    "amount": 6000000,
+    "due_date": "2024-03-15T00:00:00Z",
+    "paid_amount": 2000000
+}
+
+### Update Invoice Partial Payment
+PUT http://localhost:9000/api/invoices/1
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "paid_amount": 3000000
+}
+
+### Delete Invoice
+DELETE http://localhost:9000/api/invoices/1
+Authorization: Bearer {{admin_token}}
+
+### ========== PAYMENT ENDPOINTS ==========
+
+### Create Payment for Invoice
+POST http://localhost:9000/api/payments
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "invoice_id": 1,
+    "amount": 2500000,
+    "paid_at": "2024-01-20T10:30:00Z"
+}
+
+### Create Another Payment (Partial Payment)
+POST http://localhost:9000/api/payments
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "invoice_id": 1,
+    "amount": 1500000,
+    "paid_at": "2024-01-25T14:15:00Z"
+}
+
+### Get All Payments
+GET http://localhost:9000/api/payments
+Authorization: Bearer {{admin_token}}
+
+### Get Payments by Invoice ID
+GET http://localhost:9000/api/payments?invoice_id=1
+Authorization: Bearer {{admin_token}}
+
+### Get Single Payment
+GET http://localhost:9000/api/payments/1
+Authorization: Bearer {{admin_token}}
+
+### Update Payment
+PUT http://localhost:9000/api/payments/1
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "amount": 2800000,
+    "paid_at": "2024-01-20T11:00:00Z"
+}
+
+### Delete Payment
+DELETE http://localhost:9000/api/payments/1
+Authorization: Bearer {{admin_token}}
+
+### ========== INVOICE REPORTING ==========
+
+### Get Invoice Summary Report
+GET http://localhost:9000/api/invoices/reports/summary
+Authorization: Bearer {{admin_token}}
+
+### Get Overdue Invoices
+GET http://localhost:9000/api/invoices/reports/overdue
+Authorization: Bearer {{admin_token}}
+
+### Get Invoice Aging Report
+GET http://localhost:9000/api/invoices/reports/aging
+Authorization: Bearer {{admin_token}}
+
+### ========== COMBINED TESTS ==========
+
+### Test Complete Invoice Workflow
+# 1. Create Customer (if needed)
+POST http://localhost:9000/api/customers
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "name": "PT Test Invoice",
+    "email": "test@invoice.com",
+    "phone": "021-1234567",
+    "status": "Active"
+}
+
+### 2. Create Invoice for the Customer
+POST http://localhost:9000/api/invoices
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "customer_id": 2,
+    "project_id": "PRJ-TEST-001",
+    "invoice_number": "INV-TEST-001",
+    "amount": 10000000,
+    "issued_date": "2024-01-15T00:00:00Z",
+    "due_date": "2024-02-15T00:00:00Z",
+    "paid_amount": 0
+}
+
+### 3. Make First Payment
+POST http://localhost:9000/api/payments
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "invoice_id": 2,
+    "amount": 4000000,
+    "paid_at": "2024-01-20T10:00:00Z"
+}
+
+### 4. Make Second Payment (Complete Payment)
+POST http://localhost:9000/api/payments
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+    "invoice_id": 2,
+    "amount": 6000000,
+    "paid_at": "2024-01-25T15:30:00Z"
+}
+
+### 5. Verify Invoice Status After Payments
+GET http://localhost:9000/api/invoices/2
+Authorization: Bearer {{admin_token}}
+
+### 6. Get All Payments for This Invoice
+GET http://localhost:9000/api/payments?invoice_id=2
+Authorization: Bearer {{admin_token}}
+
+
+
+### Test POST Create Activity - Meeting
+POST http://localhost:8080/api/activities
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+  "customer_id": 1,
+  "title": "Client Meeting with PT ABC",
+  "type": "Meeting",
+  "agenda": "Discuss project requirements and timeline",
+  "start_time": "2024-08-17T09:00:00Z",
+  "end_time": "2024-08-17T11:00:00Z",
+  "location_name": "Conference Room A",
+  "status": "Scheduled"
+}
+
+### Test POST Create Activity - Presentation
+POST http://localhost:8080/api/activities
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+  "customer_id": 2,
+  "title": "Product Presentation",
+  "type": "Presentation",
+  "agenda": "Present new product features and benefits",
+  "start_time": "2024-08-18T14:00:00Z",
+  "end_time": "2024-08-18T16:00:00Z",
+  "location_name": "Client Office - Jakarta",
+  "status": "Planned"
+}
+
+### Test POST Create Activity - Training
+POST http://localhost:8080/api/activities
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+  "customer_id": 1,
+  "title": "System Training Session",
+  "type": "Training",
+  "agenda": "Train client team on new system usage",
+  "start_time": "2024-08-19T10:00:00Z",
+  "end_time": "2024-08-19T15:00:00Z",
+  "location_name": "Training Center",
+  "status": "Confirmed"
+}
+
+### Test POST Create Activity - Follow Up
+POST http://localhost:8080/api/activities
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+  "customer_id": 3,
+  "title": "Follow Up Call",
+  "type": "Call",
+  "agenda": "Follow up on previous meeting outcomes",
+  "start_time": "2024-08-20T13:00:00Z",
+  "end_time": "2024-08-20T13:30:00Z",
+  "location_name": "Phone Call",
+  "status": "Scheduled"
+}
+
+### Test POST Create Activity - Minimal Data
+POST http://localhost:8080/api/activities
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+{
+  "customer_id": 1,
+  "title": "Quick Check-in",
+  "type": "Call",
+  "start_time": "2024-08-21T08:00:00Z",
+  "end_time": "2024-08-21T08:15:00Z"
+}
+
+
+
+
+

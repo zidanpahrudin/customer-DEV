@@ -1,0 +1,3208 @@
+basePath: /
+definitions:
+  dto.ActivitiesResponse:
+    properties:
+      activities:
+        items:
+          $ref: '#/definitions/dto.ActivityResponse'
+        type: array
+      total:
+        example: 10
+        type: integer
+    type: object
+  dto.ActivityAttendeeRequest:
+    type: object
+  dto.ActivityCheckinRequest:
+    type: object
+  dto.ActivityResponse:
+    properties:
+      agenda:
+        example: Discuss project requirements
+        type: string
+      created_at:
+        example: "2024-01-15T08:00:00Z"
+        type: string
+      created_by:
+        example: 1
+        type: integer
+      customer_id:
+        example: 1
+        type: integer
+      end_time:
+        example: "2024-01-15T12:00:00Z"
+        type: string
+      id:
+        example: 1
+        type: integer
+      location_name:
+        example: Conference Room A
+        type: string
+      start_time:
+        example: "2024-01-15T10:00:00Z"
+        type: string
+      status:
+        example: Scheduled
+        type: string
+      title:
+        example: Client Meeting
+        type: string
+      type:
+        example: Meeting
+        type: string
+      updated_at:
+        example: "2024-01-15T08:00:00Z"
+        type: string
+    type: object
+  dto.CreateActivityRequest:
+    properties:
+      agenda:
+        example: Discuss project requirements
+        type: string
+      customer_id:
+        example: 1
+        type: integer
+      end_time:
+        example: "2024-01-15T12:00:00Z"
+        type: string
+      location_name:
+        example: Conference Room A
+        type: string
+      start_time:
+        example: "2024-01-15T10:00:00Z"
+        type: string
+      status:
+        example: Scheduled
+        type: string
+      title:
+        example: Client Meeting
+        type: string
+      type:
+        example: Meeting
+        type: string
+    required:
+    - customer_id
+    - end_time
+    - start_time
+    - title
+    - type
+    type: object
+  dto.CreateAddressRequest:
+    properties:
+      active:
+        example: true
+        type: boolean
+      address:
+        example: Jl. Sudirman No. 123, Jakarta Selatan
+        type: string
+      customer_id:
+        type: integer
+      isMain:
+        example: true
+        type: boolean
+      name:
+        example: Head Office
+        type: string
+    required:
+    - address
+    - customer_id
+    - name
+    type: object
+  dto.CreateContactRequest:
+    properties:
+      active:
+        example: true
+        type: boolean
+      birthdate:
+        example: "1985-03-15"
+        type: string
+      customer_id:
+        type: integer
+      email:
+        example: budi@digiinno.com
+        type: string
+      isMain:
+        example: true
+        type: boolean
+      jobPosition:
+        example: CEO
+        type: string
+      mobile:
+        example: 0812-3456-7890
+        type: string
+      name:
+        example: Budi Santoso
+        type: string
+      phone:
+        example: 021-5551234
+        type: string
+    required:
+    - customer_id
+    - name
+    type: object
+  dto.CreateCustomerRequest:
+    properties:
+      accountManagerId:
+        description: Ubah dari account_manager_id ke accountManagerId
+        type: string
+      addresses:
+        items:
+          $ref: '#/definitions/dto.CreateAddressRequest'
+        type: array
+      brandName:
+        description: Ubah dari brand_name ke brandName
+        type: string
+      code:
+        type: string
+      contacts:
+        items:
+          $ref: '#/definitions/dto.CreateContactRequest'
+        type: array
+      groups:
+        items:
+          $ref: '#/definitions/dto.CreateGroupsRequest'
+        type: array
+      logo:
+        type: string
+      name:
+        type: string
+      others:
+        items:
+          $ref: '#/definitions/dto.CreateOtherRequest'
+        type: array
+      socials:
+        items:
+          $ref: '#/definitions/dto.CreateSocialRequest'
+        type: array
+      status_name:
+        type: string
+      structures:
+        items:
+          $ref: '#/definitions/dto.CreateStructureRequest'
+        type: array
+    required:
+    - name
+    type: object
+  dto.CreateGroupsRequest:
+    properties:
+      industryActive:
+        example: true
+        type: boolean
+      industryId:
+        description: Perbaiki nama field
+        example: "1"
+        type: string
+      parentGroupActive:
+        example: true
+        type: boolean
+      parentGroupId:
+        description: Perbaiki nama field
+        example: "2"
+        type: string
+    type: object
+  dto.CreateOtherRequest:
+    properties:
+      active:
+        example: true
+        type: boolean
+      customer_id:
+        type: integer
+      key:
+        example: company_size
+        type: string
+      value:
+        example: 50-100 employees
+        type: string
+    required:
+    - customer_id
+    - key
+    type: object
+  dto.CreateSocialRequest:
+    properties:
+      active:
+        example: true
+        type: boolean
+      handle:
+        example: '@digiinno_id'
+        type: string
+      name:
+        example: Instagram
+        type: string
+      platform:
+        example: Instagram
+        type: string
+    required:
+    - handle
+    - name
+    - platform
+    type: object
+  dto.CreateStatusRequest:
+    properties:
+      status_name:
+        type: string
+    required:
+    - status_name
+    type: object
+  dto.CreateStructureRequest:
+    properties:
+      active:
+        example: true
+        type: boolean
+      address:
+        example: Jakarta
+        type: string
+      customer_id:
+        type: integer
+      level:
+        example: 1
+        type: integer
+      name:
+        example: Board of Directors
+        type: string
+      parentKey:
+        example: "null"
+        type: string
+      tempKey:
+        example: "1"
+        type: string
+    required:
+    - customer_id
+    - level
+    - name
+    type: object
+  dto.Customer:
+    properties:
+      average_cost:
+        example: 50000000
+        type: number
+      brand_name:
+        example: TechMaju
+        type: string
+      category:
+        example: Technology
+        type: string
+      code:
+        example: TM001
+        type: string
+      description:
+        example: Perusahaan teknologi informasi
+        type: string
+      email:
+        example: info@teknologimaju.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: PT Teknologi Maju
+        type: string
+      phone:
+        example: 021-12345678
+        type: string
+      rating:
+        example: 4.5
+        type: number
+      status:
+        example: Active
+        type: string
+      website:
+        example: https://teknologimaju.com
+        type: string
+    type: object
+  dto.CustomerResponse:
+    properties:
+      average_cost:
+        example: 50000000
+        type: number
+      brand_name:
+        example: TechMaju
+        type: string
+      category:
+        example: Technology
+        type: string
+      code:
+        example: TM001
+        type: string
+      description:
+        example: Perusahaan teknologi informasi
+        type: string
+      email:
+        example: info@teknologimaju.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: PT Teknologi Maju
+        type: string
+      phone:
+        example: 021-12345678
+        type: string
+      rating:
+        example: 4.5
+        type: number
+      status:
+        example: Active
+        type: string
+      website:
+        example: https://teknologimaju.com
+        type: string
+    type: object
+  dto.CustomersResponse:
+    properties:
+      customers:
+        items:
+          $ref: '#/definitions/dto.Customer'
+        type: array
+      stats:
+        $ref: '#/definitions/dto.Stats'
+    type: object
+  dto.ErrorResponse:
+    properties:
+      error:
+        example: Invalid request
+        type: string
+    type: object
+  dto.LoginRequest:
+    properties:
+      password:
+        example: password123
+        type: string
+      username:
+        example: user123
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  dto.LoginResponse:
+    properties:
+      token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+      user:
+        $ref: '#/definitions/dto.User'
+    type: object
+  dto.RegisterRequest:
+    properties:
+      email:
+        example: user@example.com
+        type: string
+      password:
+        example: password123
+        minLength: 6
+        type: string
+      username:
+        example: user123
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  dto.Stats:
+    properties:
+      avg_cost:
+        example: 45000000
+        type: number
+      blocked_customers:
+        example: 5
+        type: integer
+      new_customers:
+        example: 10
+        type: integer
+      total_customers:
+        example: 100
+        type: integer
+    type: object
+  dto.StatusResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      status_name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  dto.UpdateActivityRequest:
+    properties:
+      agenda:
+        example: Updated agenda
+        type: string
+      end_time:
+        example: "2024-01-15T12:00:00Z"
+        type: string
+      location_name:
+        example: Conference Room B
+        type: string
+      start_time:
+        example: "2024-01-15T10:00:00Z"
+        type: string
+      status:
+        example: Completed
+        type: string
+      title:
+        example: Updated Meeting
+        type: string
+      type:
+        example: Meeting
+        type: string
+    type: object
+  dto.UpdateStatusRequest:
+    properties:
+      status_name:
+        type: string
+    required:
+    - status_name
+    type: object
+  dto.User:
+    properties:
+      email:
+        example: user@example.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      role_id:
+        example: 1
+        type: integer
+      username:
+        example: user123
+        type: string
+    type: object
+  entity.Activity:
+    properties:
+      activity_checkins:
+        items:
+          $ref: '#/definitions/entity.ActivityCheckin'
+        type: array
+      agenda:
+        type: string
+      attendees:
+        items:
+          $ref: '#/definitions/entity.User'
+        type: array
+      created_at:
+        type: string
+      created_by:
+        type: integer
+      creator:
+        $ref: '#/definitions/entity.User'
+      customer_id:
+        type: integer
+      end_time:
+        type: string
+      id:
+        type: integer
+      location_name:
+        type: string
+      start_time:
+        type: string
+      status:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  entity.ActivityCheckin:
+    properties:
+      activity_id:
+        type: integer
+      checked_in_at:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      updated_at:
+        type: string
+      user:
+        $ref: '#/definitions/entity.User'
+      user_id:
+        type: integer
+    type: object
+  entity.Address:
+    properties:
+      active:
+        type: boolean
+      address:
+        type: string
+      city:
+        type: string
+      country:
+        type: string
+      created_at:
+        type: string
+      customer_id:
+        type: integer
+      id:
+        type: integer
+      main:
+        type: boolean
+      name:
+        description: SupplierID *uint          `json:"supplier_id"` // HAPUS field
+          ini
+        type: string
+      postal_code:
+        type: string
+      state:
+        type: string
+      street:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  entity.Contact:
+    properties:
+      active:
+        type: boolean
+      birthdate:
+        type: string
+      created_at:
+        type: string
+      customer_id:
+        type: integer
+      department:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      job_position:
+        type: string
+      main:
+        type: boolean
+      mobile:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      position:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  entity.Customer:
+    properties:
+      account_manager_id:
+        type: string
+      activities:
+        items:
+          $ref: '#/definitions/entity.Activity'
+        type: array
+      addresses:
+        description: Relations
+        items:
+          $ref: '#/definitions/entity.Address'
+        type: array
+      average_cost:
+        type: number
+      brand_name:
+        type: string
+      category:
+        type: string
+      code:
+        type: string
+      contacts:
+        items:
+          $ref: '#/definitions/entity.Contact'
+        type: array
+      created_at:
+        type: string
+      description:
+        type: string
+      email:
+        type: string
+      groups:
+        items:
+          $ref: '#/definitions/entity.Group'
+        type: array
+      id:
+        type: integer
+      logo:
+        type: string
+      name:
+        type: string
+      others:
+        items:
+          $ref: '#/definitions/entity.Other'
+        type: array
+      phone:
+        type: string
+      rating:
+        type: number
+      sosmeds:
+        items:
+          $ref: '#/definitions/entity.Sosmed'
+        type: array
+      status:
+        description: Status internal
+        type: string
+      structures:
+        items:
+          $ref: '#/definitions/entity.Structure'
+        type: array
+      updated_at:
+        type: string
+      website:
+        type: string
+    type: object
+  entity.Group:
+    properties:
+      active:
+        type: boolean
+      created_at:
+        type: string
+      customers:
+        description: Relations
+        items:
+          $ref: '#/definitions/entity.Customer'
+        type: array
+      id:
+        type: integer
+      name_group:
+        type: string
+      updated_at:
+        type: string
+      value:
+        type: string
+    type: object
+  entity.Other:
+    properties:
+      active:
+        type: boolean
+      created_at:
+        type: string
+      customer_id:
+        type: integer
+      id:
+        type: integer
+      key:
+        type: string
+      updated_at:
+        type: string
+      value:
+        type: string
+    type: object
+  entity.Role:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      role_name:
+        type: string
+      updated_at:
+        type: string
+      users:
+        description: Relations
+        items:
+          $ref: '#/definitions/entity.User'
+        type: array
+    type: object
+  entity.Sosmed:
+    properties:
+      active:
+        type: boolean
+      created_at:
+        type: string
+      customer_id:
+        type: integer
+      followers:
+        type: integer
+      handle:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      platform:
+        type: string
+      updated_at:
+        type: string
+      url:
+        type: string
+      username:
+        type: string
+    type: object
+  entity.Structure:
+    properties:
+      active:
+        type: boolean
+      address:
+        type: string
+      children:
+        items:
+          $ref: '#/definitions/entity.Structure'
+        type: array
+      created_at:
+        type: string
+      customer_id:
+        type: integer
+      id:
+        type: integer
+      level:
+        type: integer
+      name:
+        type: string
+      parent:
+        $ref: '#/definitions/entity.Structure'
+      parent_id:
+        type: integer
+      position:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  entity.User:
+    properties:
+      activities:
+        items:
+          $ref: '#/definitions/entity.Activity'
+        type: array
+      activity_checkins:
+        items:
+          $ref: '#/definitions/entity.ActivityCheckin'
+        type: array
+      attending_activities:
+        items:
+          $ref: '#/definitions/entity.Activity'
+        type: array
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      role:
+        allOf:
+        - $ref: '#/definitions/entity.Role'
+        description: |-
+          Update struct User, tambahkan di bagian Relations:
+          Relations
+      role_id:
+        description: Default to regular user role
+        type: integer
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
+  handler.GroupInput:
+    properties:
+      active:
+        type: boolean
+      name_group:
+        type: string
+      value:
+        type: string
+    required:
+    - name_group
+    type: object
+host: localhost:9000
+info:
+  contact: {}
+  description: API untuk manajemen customer menggunakan Golang, Gin, dan PostgreSQL
+  title: Customer Management API
+  version: "1.0"
+paths:
+  /api/activities:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all activities with pagination
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ActivitiesResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all activities
+      tags:
+      - Activities
+    post:
+      consumes:
+      - application/json
+      description: Create a new activity for a customer
+      parameters:
+      - description: Activity data
+        in: body
+        name: activity
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateActivityRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.ActivityResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create new activity
+      tags:
+      - Activities
+  /api/activities/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an activity
+      parameters:
+      - description: Activity ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete activity
+      tags:
+      - Activities
+    get:
+      consumes:
+      - application/json
+      description: Get a specific activity by ID
+      parameters:
+      - description: Activity ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ActivityResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get activity by ID
+      tags:
+      - Activities
+    put:
+      consumes:
+      - application/json
+      description: Update an existing activity
+      parameters:
+      - description: Activity ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Activity data
+        in: body
+        name: activity
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateActivityRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ActivityResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update activity
+      tags:
+      - Activities
+  /api/activities/{id}/attendees:
+    delete:
+      consumes:
+      - application/json
+      description: Remove users as attendees from an activity
+      parameters:
+      - description: Activity ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Attendee user IDs to remove
+        in: body
+        name: attendees
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ActivityAttendeeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Remove attendees from activity
+      tags:
+      - Activities
+    post:
+      consumes:
+      - application/json
+      description: Add users as attendees to an activity
+      parameters:
+      - description: Activity ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Attendee user IDs
+        in: body
+        name: attendees
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ActivityAttendeeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Add attendees to activity
+      tags:
+      - Activities
+  /api/activities/{id}/checkin:
+    post:
+      consumes:
+      - application/json
+      description: Check-in to an activity with location
+      parameters:
+      - description: Activity ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Check-in data with location
+        in: body
+        name: checkin
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ActivityCheckinRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Check-in to activity
+      tags:
+      - Activities
+  /api/addresses:
+    post:
+      consumes:
+      - application/json
+      - application/json
+      description: |-
+        Create a new address for specific customer
+        Create a new address
+      parameters:
+      - description: Address data
+        in: body
+        name: address
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Address'
+      - description: Address data
+        in: body
+        name: address
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateAddressRequest'
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entity.Address'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      - BearerAuth: []
+      summary: Create address
+      tags:
+      - Addresses
+      - Addresses
+  /api/addresses/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an address by ID
+      parameters:
+      - description: Address ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete address
+      tags:
+      - Addresses
+    get:
+      consumes:
+      - application/json
+      description: Get a specific address by ID
+      parameters:
+      - description: Address ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Address'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get address by ID
+      tags:
+      - Addresses
+    put:
+      consumes:
+      - application/json
+      description: Update an existing address
+      parameters:
+      - description: Address ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Address data
+        in: body
+        name: address
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Address'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Address'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update address
+      tags:
+      - Addresses
+  /api/contacts:
+    post:
+      consumes:
+      - application/json
+      - application/json
+      description: |-
+        Create a new contact person for specific customer
+        Create a new contact
+      parameters:
+      - description: Contact data
+        in: body
+        name: contact
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Contact'
+      - description: Contact data
+        in: body
+        name: contact
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateContactRequest'
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entity.Contact'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      - BearerAuth: []
+      summary: Create contact
+      tags:
+      - Contacts
+      - Contacts
+  /api/contacts/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a contact person by ID
+      parameters:
+      - description: Contact ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete contact
+      tags:
+      - Contacts
+    get:
+      consumes:
+      - application/json
+      description: Get a specific contact person by ID
+      parameters:
+      - description: Contact ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Contact'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get contact by ID
+      tags:
+      - Contacts
+    put:
+      consumes:
+      - application/json
+      description: Update an existing contact person
+      parameters:
+      - description: Contact ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Contact data
+        in: body
+        name: contact
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Contact'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Contact'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update contact
+      tags:
+      - Contacts
+  /api/customers:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all customers with optional status filter
+      parameters:
+      - description: Filter by status
+        enum:
+        - Active
+        - Inactive
+        - Blocked
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.CustomersResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all customers
+      tags:
+      - Customers
+    post:
+      consumes:
+      - application/json
+      description: Create a new customer record with all related data including addresses,
+        social media, contacts, structures, groups, and other attributes
+      parameters:
+      - description: Customer data
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateCustomerRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entity.Customer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create new customer
+      tags:
+      - Customers
+  /api/customers/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a specific customer by ID
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Customer'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get customer by ID
+      tags:
+      - Customers
+  /api/customers/{id}/addresses:
+    get:
+      consumes:
+      - application/json
+      description: Get all addresses for specific customer
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Address'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get customer addresses
+      tags:
+      - Addresses
+    post:
+      consumes:
+      - application/json
+      - application/json
+      description: |-
+        Create a new address for specific customer
+        Create a new address
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Address data
+        in: body
+        name: address
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Address'
+      - description: Address data
+        in: body
+        name: address
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateAddressRequest'
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entity.Address'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      - BearerAuth: []
+      summary: Create address
+      tags:
+      - Addresses
+      - Addresses
+  /api/customers/{id}/contacts:
+    get:
+      consumes:
+      - application/json
+      description: Get all contact persons for specific customer
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Contact'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get customer contacts
+      tags:
+      - Contacts
+    post:
+      consumes:
+      - application/json
+      - application/json
+      description: |-
+        Create a new contact person for specific customer
+        Create a new contact
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Contact data
+        in: body
+        name: contact
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Contact'
+      - description: Contact data
+        in: body
+        name: contact
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateContactRequest'
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entity.Contact'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      - BearerAuth: []
+      summary: Create contact
+      tags:
+      - Contacts
+      - Contacts
+  /api/customers/{id}/full:
+    get:
+      consumes:
+      - application/json
+      description: Get complete customer data with all relations
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Customer'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get customer full data
+      tags:
+      - Customers
+  /api/customers/{id}/others:
+    get:
+      consumes:
+      - application/json
+      description: Get all other attributes for specific customer
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Filter by active status
+        in: query
+        name: active
+        type: boolean
+      - description: Filter by attribute name
+        in: query
+        name: attribute_name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Other'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get customer others
+      tags:
+      - Others
+  /api/customers/{id}/sosmeds:
+    get:
+      consumes:
+      - application/json
+      description: Get all social media accounts for specific customer
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Sosmed'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get customer sosmeds
+      tags:
+      - Social Media
+    post:
+      consumes:
+      - application/json
+      description: Create a new social media account for specific customer
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Sosmed data
+        in: body
+        name: sosmed
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Sosmed'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entity.Sosmed'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create sosmed for customer
+      tags:
+      - Social Media
+  /api/customers/{id}/structures:
+    get:
+      consumes:
+      - application/json
+      description: Get all organizational structures for specific customer
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Structure'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get customer structures
+      tags:
+      - Structures
+    post:
+      consumes:
+      - application/json
+      - application/json
+      description: |-
+        Create a new organizational structure for specific customer
+        Create a new structure
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Structure data
+        in: body
+        name: structure
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Structure'
+      - description: Structure data
+        in: body
+        name: structure
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateStructureRequest'
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entity.Structure'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      - BearerAuth: []
+      summary: Create structure
+      tags:
+      - Structures
+      - Structures
+  /api/customers/{id}/structures/by-level:
+    get:
+      consumes:
+      - application/json
+      description: Get organizational structures filtered by level for specific customer
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Structure level filter
+        in: query
+        name: level
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Structure'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get structures by level
+      tags:
+      - Structures
+  /api/customers/{id}/with-addresses:
+    get:
+      consumes:
+      - application/json
+      description: Get customer data with all addresses
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Customer'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get customer with addresses
+      tags:
+      - Customers
+  /api/customers/{id}/with-all:
+    get:
+      consumes:
+      - application/json
+      description: Get customer data with all related data (addresses, sosmeds, contacts,
+        structures)
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Customer'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get customer with all relations
+      tags:
+      - Customers
+  /api/customers/{id}/with-all-relations:
+    get:
+      consumes:
+      - application/json
+      description: Get customer data with all relations (addresses and social media
+        accounts)
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Customer'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get customer with all relations
+      tags:
+      - Customers
+  /api/customers/{id}/with-contacts:
+    get:
+      consumes:
+      - application/json
+      description: Get customer data with all contact persons
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Customer'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get customer with contacts
+      tags:
+      - Customers
+  /api/customers/{id}/with-others:
+    get:
+      consumes:
+      - application/json
+      description: Get customer data with all other attributes
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Customer'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get customer with others
+      tags:
+      - Customers
+  /api/customers/{id}/with-sosmeds:
+    get:
+      consumes:
+      - application/json
+      description: Get customer data with all social media accounts
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Customer'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get customer with sosmeds
+      tags:
+      - Customers
+  /api/customers/{id}/with-structures:
+    get:
+      consumes:
+      - application/json
+      description: Get customer data with all organizational structures
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Customer'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get customer with structures
+      tags:
+      - Customers
+  /api/groups:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all groups
+      parameters:
+      - description: Filter by active status
+        in: query
+        name: active
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Group'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all groups
+      tags:
+      - Groups
+    post:
+      consumes:
+      - application/json
+      description: Create a new group
+      parameters:
+      - description: Group data
+        in: body
+        name: group
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateGroupsRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entity.Group'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create group
+      tags:
+      - Groups
+  /api/groups/{group_id}/customers/{customer_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove a customer from a specific group
+      parameters:
+      - description: Group ID
+        in: path
+        name: group_id
+        required: true
+        type: integer
+      - description: Customer ID
+        in: path
+        name: customer_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Remove customer from group
+      tags:
+      - Groups
+    post:
+      consumes:
+      - application/json
+      description: Assign a customer to a specific group
+      parameters:
+      - description: Group ID
+        in: path
+        name: group_id
+        required: true
+        type: integer
+      - description: Customer ID
+        in: path
+        name: customer_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Assign customer to group
+      tags:
+      - Groups
+  /api/groups/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a group by ID
+      parameters:
+      - description: Group ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete group
+      tags:
+      - Groups
+    get:
+      consumes:
+      - application/json
+      description: Get a specific group by ID
+      parameters:
+      - description: Group ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Group'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get group by ID
+      tags:
+      - Groups
+    put:
+      consumes:
+      - application/json
+      description: Update an existing group
+      parameters:
+      - description: Group ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Group data
+        in: body
+        name: group
+        required: true
+        schema:
+          $ref: '#/definitions/handler.GroupInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Group'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update group
+      tags:
+      - Groups
+  /api/groups/{id}/customers:
+    get:
+      consumes:
+      - application/json
+      description: Get all customers in a specific group
+      parameters:
+      - description: Group ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Customer'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get group customers
+      tags:
+      - Groups
+  /api/others:
+    post:
+      consumes:
+      - application/json
+      description: Create a new other field
+      parameters:
+      - description: Other data
+        in: body
+        name: other
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateOtherRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entity.Other'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create other
+      tags:
+      - Others
+  /api/others/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an other attribute by ID
+      parameters:
+      - description: Other ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete other
+      tags:
+      - Others
+    get:
+      consumes:
+      - application/json
+      description: Get a specific other attribute by ID
+      parameters:
+      - description: Other ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Other'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get other by ID
+      tags:
+      - Others
+  /api/others/by-attribute:
+    get:
+      consumes:
+      - application/json
+      description: Get all other attributes filtered by attribute name across all
+        customers
+      parameters:
+      - description: Attribute name to filter
+        in: query
+        name: attribute_name
+        required: true
+        type: string
+      - description: Filter by active status
+        in: query
+        name: active
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Other'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get others by attribute name
+      tags:
+      - Others
+  /api/roles:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all roles
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Role'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all roles
+      tags:
+      - Roles
+  /api/roles/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a specific role by ID
+      parameters:
+      - description: Role ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Role'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get role by ID
+      tags:
+      - Roles
+  /api/sosmeds/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a social media account by ID
+      parameters:
+      - description: Sosmed ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete sosmed
+      tags:
+      - Social Media
+    get:
+      consumes:
+      - application/json
+      description: Get a specific social media account by ID
+      parameters:
+      - description: Sosmed ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Sosmed'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get sosmed by ID
+      tags:
+      - Social Media
+    put:
+      consumes:
+      - application/json
+      description: Update an existing social media account
+      parameters:
+      - description: Sosmed ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Sosmed data
+        in: body
+        name: sosmed
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Sosmed'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Sosmed'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update sosmed
+      tags:
+      - Social Media
+  /api/statuses:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all statuses (master data)
+      parameters:
+      - description: Filter by active status
+        in: query
+        name: active
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.StatusResponse'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all statuses
+      tags:
+      - Statuses
+    post:
+      consumes:
+      - application/json
+      description: Create a new status (master data)
+      parameters:
+      - description: Status data
+        in: body
+        name: status
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.StatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create status
+      tags:
+      - Statuses
+  /api/statuses/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a status (soft delete)
+      parameters:
+      - description: Status ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete status
+      tags:
+      - Statuses
+    get:
+      consumes:
+      - application/json
+      description: Get a specific status by ID
+      parameters:
+      - description: Status ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.StatusResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get status by ID
+      tags:
+      - Statuses
+    put:
+      consumes:
+      - application/json
+      description: Update an existing status
+      parameters:
+      - description: Status ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Status data
+        in: body
+        name: status
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.StatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update status
+      tags:
+      - Statuses
+  /api/statuses/{id}/customers:
+    get:
+      consumes:
+      - application/json
+      description: Get all customers that have a specific status
+      parameters:
+      - description: Status ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.CustomerResponse'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get customers by status
+      tags:
+      - Statuses
+  /api/structures:
+    post:
+      consumes:
+      - application/json
+      - application/json
+      description: |-
+        Create a new organizational structure for specific customer
+        Create a new structure
+      parameters:
+      - description: Structure data
+        in: body
+        name: structure
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Structure'
+      - description: Structure data
+        in: body
+        name: structure
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateStructureRequest'
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entity.Structure'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      - BearerAuth: []
+      summary: Create structure
+      tags:
+      - Structures
+      - Structures
+  /api/structures/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an organizational structure by ID
+      parameters:
+      - description: Structure ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete structure
+      tags:
+      - Structures
+    get:
+      consumes:
+      - application/json
+      description: Get a specific organizational structure by ID
+      parameters:
+      - description: Structure ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Structure'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get structure by ID
+      tags:
+      - Structures
+    put:
+      consumes:
+      - application/json
+      description: Update an existing organizational structure
+      parameters:
+      - description: Structure ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Structure data
+        in: body
+        name: structure
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Structure'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Structure'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update structure
+      tags:
+      - Structures
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user and return JWT token
+      parameters:
+      - description: Login credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: User login
+      tags:
+      - Authentication
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user account
+      parameters:
+      - description: User registration data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Register new user
+      tags:
+      - Authentication
+securityDefinitions:
+  BearerAuth:
+    description: Type \"Bearer\" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
