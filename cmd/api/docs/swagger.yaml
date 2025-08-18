@@ -94,17 +94,16 @@ definitions:
       address:
         example: Jl. Sudirman No. 123, Jakarta Selatan
         type: string
-      customer_id:
-        type: integer
       isMain:
         example: true
         type: boolean
       name:
+        description: CustomerID uint   `json:"customer_id" binding:"required"` //
+          Hapus field ini
         example: Head Office
         type: string
     required:
     - address
-    - customer_id
     - name
     type: object
   dto.CreateContactRequest:
@@ -115,8 +114,6 @@ definitions:
       birthdate:
         example: "1985-03-15"
         type: string
-      customer_id:
-        type: integer
       email:
         example: budi@digiinno.com
         type: string
@@ -130,13 +127,14 @@ definitions:
         example: 0812-3456-7890
         type: string
       name:
+        description: CustomerID  uint   `json:"customer_id" binding:"required"` //
+          Hapus field ini
         example: Budi Santoso
         type: string
       phone:
         example: 021-5551234
         type: string
     required:
-    - customer_id
     - name
     type: object
   dto.CreateCustomerRequest:
@@ -162,6 +160,9 @@ definitions:
           $ref: '#/definitions/dto.CreateGroupsRequest'
         type: array
       logo:
+        type: string
+      logoSmall:
+        description: Field baru untuk logo kecil
         type: string
       name:
         type: string
@@ -204,16 +205,15 @@ definitions:
       active:
         example: true
         type: boolean
-      customer_id:
-        type: integer
       key:
+        description: CustomerID uint    `json:"customer_id" binding:"required"` //
+          Hapus field ini
         example: company_size
         type: string
       value:
         example: 50-100 employees
         type: string
     required:
-    - customer_id
     - key
     type: object
   dto.CreateSocialRequest:
@@ -224,15 +224,13 @@ definitions:
       handle:
         example: '@digiinno_id'
         type: string
-      name:
-        example: Instagram
-        type: string
       platform:
+        description: Name     string `json:"name" binding:"required" example:"Instagram"`
+          // Hapus field ini karena duplikat dengan Platform
         example: Instagram
         type: string
     required:
     - handle
-    - name
     - platform
     type: object
   dto.CreateStatusRequest:
@@ -250,8 +248,6 @@ definitions:
       address:
         example: Jakarta
         type: string
-      customer_id:
-        type: integer
       level:
         example: 1
         type: integer
@@ -262,10 +258,11 @@ definitions:
         example: "null"
         type: string
       tempKey:
+        description: CustomerID uint    `json:"customer_id" binding:"required"` //
+          Hapus field ini
         example: "1"
         type: string
     required:
-    - customer_id
     - level
     - name
     type: object
@@ -292,6 +289,10 @@ definitions:
       id:
         example: 1
         type: integer
+      logo_small:
+        description: Field baru untuk logo kecil
+        example: uploads/logos_small/logo_small_1.png
+        type: string
       name:
         example: PT Teknologi Maju
         type: string
@@ -331,6 +332,10 @@ definitions:
       id:
         example: 1
         type: integer
+      logo_small:
+        description: Field baru untuk logo kecil
+        example: uploads/logos_small/logo_small_1.png
+        type: string
       name:
         example: PT Teknologi Maju
         type: string
@@ -625,6 +630,9 @@ definitions:
       id:
         type: integer
       logo:
+        type: string
+      logo_small:
+        description: Field baru untuk logo kecil
         type: string
       name:
         type: string
@@ -1740,6 +1748,47 @@ paths:
       security:
       - BearerAuth: []
       summary: Get customer full data
+      tags:
+      - Customers
+  /api/customers/{id}/logo-small:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload a small logo/icon for customer (PNG, SVG, JPG)
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Logo small file (PNG, SVG, JPG)
+        in: formData
+        name: logo_small
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Upload customer logo small
       tags:
       - Customers
   /api/customers/{id}/others:
