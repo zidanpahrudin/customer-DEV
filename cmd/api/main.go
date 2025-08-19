@@ -118,7 +118,7 @@ func main() {
 		protected.POST("/activities", handler.CreateActivity)
 		protected.GET("/activities", handler.GetActivities)
 		protected.GET("/activities/:id", handler.GetActivity)
-		protected.PUT("/activities/:id", handler.UpdateActivity)
+		protected.PUT("/activities/:id", handler.UpdateActivity) // Hapus baris ini
 		protected.DELETE("/activities/:id", handler.DeleteActivity)
 
 		// Activity attendees routes
@@ -127,6 +127,9 @@ func main() {
 
 		// Activity check-in routes
 		protected.POST("/activities/:id/checkin", handler.CheckinActivity)
+
+		// Customer-specific activity routes
+		protected.PUT("/customers/:customer_id/activities/:id", handler.UpdateActivityByCustomer)
 
 		// Invoice routes
 		/* 		protected.POST("/invoices", handler.CreateInvoice)

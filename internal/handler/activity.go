@@ -39,7 +39,7 @@ func GetActivities(c *gin.Context) {
 	status := c.Query("status")
 	activityType := c.Query("type")
 
-	db := config.DB.Preload("Customer").Preload("CreatedByUser")
+	db := config.DB.Preload("Customer").Preload("Creator")
 
 	if customerID != "" {
 		db = db.Where("customer_id = ?", customerID)
@@ -213,27 +213,37 @@ func GetActivity(c *gin.Context) {
 	c.JSON(http.StatusOK, activityResponse)
 }
 
-// @Summary Update activity
-// @Description Update an existing activity
+// @Summary Update activity by customer ID
+// @Description Update a specific activity for a customer
 // @Tags Activities
 // @Accept json
 // @Produce json
 // @Security BearerAuth
+// @Param customer_id path int true "Customer ID"
 // @Param id path int true "Activity ID"
-// @Param activity body dto.UpdateActivityRequest true "Activity data"
+// @Param activity body dto.UpdateActivityRequest true "Activity update data"
 // @Success 200 {object} dto.ActivityResponse
 // @Failure 400 {object} dto.ErrorResponse
 // @Failure 401 {object} dto.ErrorResponse
 // @Failure 404 {object} dto.ErrorResponse
 // @Failure 500 {object} dto.ErrorResponse
-// @Router /api/activities/{id} [put]
-func UpdateActivity(c *gin.Context) {
-	id := c.Param("id")
+// @Router /api/customers/{customer_id}/activities/{id} [put]
+func UpdateActivityByCustomer(c *gin.Context) {
+	customerID := c.Param("customer_id")
+	activityID := c.Param("id")
 
+	// Verify customer exists
+	var customer entity.Customer
+	if err := config.DB.First(&customer, customerID).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Customer not found"})
+		return
+	}
+
+	// Find activity that belongs to the customer
 	var activity entity.Activity
-	result := config.DB.First(&activity, id)
+	result := config.DB.Where("id = ? AND customer_id = ?", activityID, customerID).First(&activity)
 	if result.Error != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Activity not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Activity not found for this customer"})
 		return
 	}
 
@@ -283,7 +293,7 @@ func UpdateActivity(c *gin.Context) {
 	}
 
 	// Load relations for response
-	config.DB.Preload("Customer").Preload("CreatedByUser").First(&activity, activity.ID)
+	config.DB.Preload("Customer").Preload("Creator").First(&activity, activity.ID)
 
 	activityResponse := dto.ActivityResponse{
 		ID:           activity.ID,
@@ -501,4 +511,95 @@ func CheckinActivity(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Checked in successfully"})
+}
+
+// @Summary Update activity
+// @Description Update a specific activity by ID
+// @Tags Activities
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path int true "Activity ID"
+// @Param activity body dto.UpdateActivityRequest true "Activity update data"
+// @Success 200 {object} dto.ActivityResponse
+// @Failure 400 {object} dto.ErrorResponse
+// @Failure 401 {object} dto.ErrorResponse
+// @Failure 404 {object} dto.ErrorResponse
+// @Failure 500 {object} dto.ErrorResponse
+// @Router /api/activities/{id} [put]
+func UpdateActivity(c *gin.Context) {
+	activityID := c.Param("id")
+
+	// Find activity
+	var activity entity.Activity
+	result := config.DB.First(&activity, activityID)
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Activity not found"})
+		return
+	}
+
+	var req dto.UpdateActivityRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Update fields if provided
+	if req.Title != nil {
+		activity.Title = *req.Title
+	}
+	if req.Type != nil {
+		activity.Type = *req.Type
+	}
+	if req.Agenda != nil {
+		activity.Agenda = *req.Agenda
+	}
+	if req.StartTime != nil {
+		startTime, err := time.Parse(time.RFC3339, *req.StartTime)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid start_time format. Use RFC3339 format"})
+			return
+		}
+		activity.StartTime = startTime
+	}
+	if req.EndTime != nil {
+		endTime, err := time.Parse(time.RFC3339, *req.EndTime)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid end_time format. Use RFC3339 format"})
+			return
+		}
+		activity.EndTime = endTime
+	}
+	if req.LocationName != nil {
+		activity.LocationName = *req.LocationName
+	}
+	if req.Status != nil {
+		activity.Status = *req.Status
+	}
+
+	result = config.DB.Save(&activity)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update activity"})
+		return
+	}
+
+	// Load relations for response
+	config.DB.Preload("Customer").Preload("Creator").First(&activity, activity.ID)
+
+	activityResponse := dto.ActivityResponse{
+		ID:           activity.ID,
+		CustomerID:   activity.CustomerID,
+		Title:        activity.Title,
+		Type:         activity.Type,
+		Agenda:       activity.Agenda,
+		StartTime:    activity.StartTime.Format(time.RFC3339),
+		EndTime:      activity.EndTime.Format(time.RFC3339),
+		LocationName: activity.LocationName,
+		Status:       activity.Status,
+		CreatedBy:    activity.CreatedBy,
+		CreatedAt:    activity.CreatedAt.Format(time.RFC3339),
+		UpdatedAt:    activity.UpdatedAt.Format(time.RFC3339),
+	}
+
+	c.JSON(http.StatusOK, activityResponse)
 }
