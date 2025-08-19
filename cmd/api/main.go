@@ -59,7 +59,7 @@ func main() {
 		protected.GET("/customers/:id/with-contacts", handler.GetCustomerWithContacts)
 		protected.GET("/customers/:id/with-structures", handler.GetCustomerWithStructures)
 		protected.GET("/customers/:id/with-all", handler.GetCustomerWithAllRelations)
-		protected.GET("/customers/:id/full", handler.GetCustomerFull)
+		/* protected.GET("/customers/:id/full", handler.GetCustomerFull) */
 		protected.PUT("/customers/:id", handler.UpdateCustomer)
 		protected.DELETE("/customers/:id", handler.DeleteCustomer)
 		protected.POST("/customers/:id/logo", handler.UploadCustomerLogo)
