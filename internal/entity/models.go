@@ -234,37 +234,38 @@ type ActivityAttendee struct {
 }
 
 // Invoice model - tabel untuk invoice
-type Invoice struct {
-	ID            uint           `json:"id" gorm:"primaryKey"`
-	CustomerID    uint           `json:"customer_id" gorm:"not null"`
-	ProjectID     string         `json:"project_id"`
-	InvoiceNumber string         `json:"invoice_number" gorm:"unique;not null"`
-	Amount        float64        `json:"amount" gorm:"not null"`
-	IssuedDate    time.Time      `json:"issued_date" gorm:"not null"`
-	DueDate       time.Time      `json:"due_date" gorm:"not null"`
-	PaidAmount    float64        `json:"paid_amount" gorm:"default:0"`
-	CreatedAt     time.Time      `json:"created_at"`
-	UpdatedAt     time.Time      `json:"updated_at"`
-	DeletedAt     gorm.DeletedAt `json:"-" gorm:"index"`
+// Hapus seluruh struct Invoice (baris 237-253)
+// type Invoice struct {
+//     ID            uint           `json:"id" gorm:"primaryKey"`
+//     CustomerID    uint           `json:"customer_id" gorm:"not null"`
+//     ProjectID     string         `json:"project_id"`
+//     InvoiceNumber string         `json:"invoice_number" gorm:"unique;not null"`
+//     Amount        float64        `json:"amount" gorm:"not null"`
+//     IssuedDate    time.Time      `json:"issued_date" gorm:"not null"`
+//     DueDate       time.Time      `json:"due_date" gorm:"not null"`
+//     PaidAmount    float64        `json:"paid_amount" gorm:"default:0"`
+//     CreatedAt     time.Time      `json:"created_at"`
+//     UpdatedAt     time.Time      `json:"updated_at"`
+//     DeletedAt     gorm.DeletedAt `json:"-" gorm:"index"`
+//
+//     // Relations
+//     Customer Customer  `json:"customer,omitempty" gorm:"foreignKey:CustomerID"`
+//     Payments []Payment `json:"payments,omitempty" gorm:"foreignKey:InvoiceID"`
+// }
 
-	// Relations
-	Customer Customer  `json:"customer,omitempty" gorm:"foreignKey:CustomerID"`
-	Payments []Payment `json:"payments,omitempty" gorm:"foreignKey:InvoiceID"` // Tambahkan ini
-}
-
-// Payment model - tabel untuk pembayaran invoice
-type Payment struct {
-	ID        uint           `json:"id" gorm:"primaryKey"`
-	InvoiceID uint           `json:"invoice_id" gorm:"not null"`
-	Amount    float64        `json:"amount" gorm:"not null"`
-	PaidAt    time.Time      `json:"paid_at" gorm:"not null"`
-	CreatedAt time.Time      `json:"created_at"`
-	UpdatedAt time.Time      `json:"updated_at"`
-	DeletedAt gorm.DeletedAt `json:"-" gorm:"index"`
-
-	// Relations
-	Invoice Invoice `json:"invoice,omitempty" gorm:"foreignKey:InvoiceID"`
-}
+// Hapus seluruh struct Payment (baris 256-268)
+// type Payment struct {
+//     ID        uint           `json:"id" gorm:"primaryKey"`
+//     InvoiceID uint           `json:"invoice_id" gorm:"not null"`
+//     Amount    float64        `json:"amount" gorm:"not null"`
+//     PaidAt    time.Time      `json:"paid_at" gorm:"not null"`
+//     CreatedAt time.Time      `json:"created_at"`
+//     UpdatedAt time.Time      `json:"updated_at"`
+//     DeletedAt gorm.DeletedAt `json:"-" gorm:"index"`
+//
+//     // Relations
+//     Invoice Invoice `json:"invoice,omitempty" gorm:"foreignKey:InvoiceID"`
+// }
 
 // Status model - tabel untuk status customer
 type Status struct {

@@ -71,8 +71,7 @@ func ConnectDatabase() {
 		&entity.Activity{},
 		&entity.ActivityCheckin{},
 		&entity.ActivityAttendee{},
-		&entity.Invoice{},
-		&entity.Payment{},
+
 		&entity.Status{},
 	)
 	if err != nil {

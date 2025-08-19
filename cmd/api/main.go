@@ -129,14 +129,14 @@ func main() {
 		protected.POST("/activities/:id/checkin", handler.CheckinActivity)
 
 		// Invoice routes
-		protected.POST("/invoices", handler.CreateInvoice)
-		protected.GET("/invoices", handler.GetInvoices)
-		protected.GET("/invoices/:id", handler.GetInvoice)
-		protected.PUT("/invoices/:id", handler.UpdateInvoice)
-		protected.DELETE("/invoices/:id", handler.DeleteInvoice)
-
+		/* 		protected.POST("/invoices", handler.CreateInvoice)
+		   		protected.GET("/invoices", handler.GetInvoices)
+		   		protected.GET("/invoices/:id", handler.GetInvoice)
+		   		protected.PUT("/invoices/:id", handler.UpdateInvoice)
+		   		protected.DELETE("/invoices/:id", handler.DeleteInvoice)
+		*/
 		// Payment routes
-		protected.POST("/payments", handler.CreatePayment)
+		/* 	protected.POST("/payments", handler.CreatePayment)
 		protected.GET("/payments", handler.GetPayments)
 		protected.GET("/payments/:id", handler.GetPayment)
 		protected.PUT("/payments/:id", handler.UpdatePayment)
@@ -145,7 +145,7 @@ func main() {
 		// Invoice-specific payment routes
 		protected.GET("/invoices/:id/payments", handler.GetInvoicePayments)
 		protected.POST("/invoices/:id/payments", handler.CreateInvoicePayment)
-
+		*/
 		// Status routes
 		protected.POST("/statuses", handler.CreateStatus)
 		protected.GET("/statuses", handler.GetStatuses)
