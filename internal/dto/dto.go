@@ -101,6 +101,7 @@ type CustomerResponse struct {
 	Contacts         []ContactResponse `json:"contacts,omitempty"`
 	Others           []OtherResponse   `json:"others,omitempty"`
 }
+
 // CreateCustomerRequest represents comprehensive customer creation request
 type CreateCustomerRequest struct {
 	Name             string                   `json:"name" binding:"required"`
@@ -121,10 +122,10 @@ type CreateCustomerRequest struct {
 // CreateAddressRequest represents address creation in customer request
 type CreateAddressRequest struct {
 	// CustomerID uint   `json:"customer_id" binding:"required"` // Hapus field ini
-	Name       string `json:"name" binding:"required" example:"Head Office"`
-	Address    string `json:"address" binding:"required" example:"Jl. Sudirman No. 123, Jakarta Selatan"`
-	IsMain     bool   `json:"isMain" example:"true"`
-	Active     bool   `json:"active" example:"true"`
+	Name    string `json:"name" binding:"required" example:"Head Office"`
+	Address string `json:"address" binding:"required" example:"Jl. Sudirman No. 123, Jakarta Selatan"`
+	IsMain  bool   `json:"isMain" example:"true"`
+	Active  bool   `json:"active" example:"true"`
 }
 
 // CreateSocialRequest represents social media creation in customer request
@@ -151,12 +152,12 @@ type CreateContactRequest struct {
 // CreateStructureRequest represents structure creation in customer request
 type CreateStructureRequest struct {
 	// CustomerID uint    `json:"customer_id" binding:"required"` // Hapus field ini
-	TempKey    string  `json:"tempKey" example:"1"`
-	ParentKey  *string `json:"parentKey" example:"null"`
-	Name       string  `json:"name" binding:"required" example:"Board of Directors"`
-	Level      int     `json:"level" binding:"required" example:"1"`
-	Address    string  `json:"address" example:"Jakarta"`
-	Active     bool    `json:"active" example:"true"`
+	TempKey   string  `json:"tempKey" example:"1"`
+	ParentKey *string `json:"parentKey" example:"null"`
+	Name      string  `json:"name" binding:"required" example:"Board of Directors"`
+	Level     int     `json:"level" binding:"required" example:"1"`
+	Address   string  `json:"address" example:"Jakarta"`
+	Active    bool    `json:"active" example:"true"`
 }
 
 // CreateGroupsRequest represents groups assignment in customer request
@@ -170,9 +171,9 @@ type CreateGroupsRequest struct {
 // CreateOtherRequest represents other attributes in customer request
 type CreateOtherRequest struct {
 	// CustomerID uint    `json:"customer_id" binding:"required"` // Hapus field ini
-	Key        string  `json:"key" binding:"required" example:"company_size"`
-	Value      *string `json:"value" example:"50-100 employees"`
-	Active     bool    `json:"active" example:"true"`
+	Key    string  `json:"key" binding:"required" example:"company_size"`
+	Value  *string `json:"value" example:"50-100 employees"`
+	Active bool    `json:"active" example:"true"`
 }
 
 // CreateActivityRequest represents activity creation request
@@ -234,7 +235,7 @@ type ActivityCheckinRequest struct {
 }
 
 // Invoice DTOs
-type CreateInvoiceRequest struct {
+/* type CreateInvoiceRequest struct {
 	CustomerID    uint      `json:"customer_id" binding:"required"`
 	ProjectID     string    `json:"project_id"`
 	InvoiceNumber string    `json:"invoice_number" binding:"required"`
@@ -242,18 +243,18 @@ type CreateInvoiceRequest struct {
 	IssuedDate    time.Time `json:"issued_date" binding:"required"`
 	DueDate       time.Time `json:"due_date" binding:"required"`
 	PaidAmount    float64   `json:"paid_amount" binding:"gte=0"`
-}
+} */
 
-type UpdateInvoiceRequest struct {
+/* type UpdateInvoiceRequest struct {
 	ProjectID     *string    `json:"project_id"`
 	InvoiceNumber *string    `json:"invoice_number"`
 	Amount        *float64   `json:"amount" binding:"omitempty,gt=0"`
 	IssuedDate    *time.Time `json:"issued_date"`
 	DueDate       *time.Time `json:"due_date"`
 	PaidAmount    *float64   `json:"paid_amount" binding:"omitempty,gte=0"`
-}
+} */
 
-type InvoiceResponse struct {
+/* type InvoiceResponse struct {
 	ID            uint              `json:"id"`
 	CustomerID    uint              `json:"customer_id"`
 	ProjectID     string            `json:"project_id"`
@@ -267,10 +268,10 @@ type InvoiceResponse struct {
 	CreatedAt     time.Time         `json:"created_at"`
 	UpdatedAt     time.Time         `json:"updated_at"`
 	Customer      *CustomerResponse `json:"customer,omitempty"`
-}
+} */
 
 // Payment DTOs
-type CreatePaymentRequest struct {
+/* type CreatePaymentRequest struct {
 	InvoiceID uint      `json:"invoice_id" binding:"required"`
 	Amount    float64   `json:"amount" binding:"required,gt=0"`
 	PaidAt    time.Time `json:"paid_at" binding:"required"`
@@ -279,9 +280,9 @@ type CreatePaymentRequest struct {
 type UpdatePaymentRequest struct {
 	Amount *float64   `json:"amount" binding:"omitempty,gt=0"`
 	PaidAt *time.Time `json:"paid_at"`
-}
+} */
 
-type PaymentResponse struct {
+/* type PaymentResponse struct {
 	ID        uint             `json:"id"`
 	InvoiceID uint             `json:"invoice_id"`
 	Amount    float64          `json:"amount"`
@@ -289,7 +290,7 @@ type PaymentResponse struct {
 	CreatedAt time.Time        `json:"created_at"`
 	UpdatedAt time.Time        `json:"updated_at"`
 	Invoice   *InvoiceResponse `json:"invoice,omitempty"`
-}
+} */
 
 // Status DTOs
 type CreateStatusRequest struct {
