@@ -341,7 +341,62 @@ func CreateCustomer(c *gin.Context) {
 	var createdCustomer entity.Customer
 	config.DB.Preload("Addresses").Preload("Sosmeds").Preload("Contacts").Preload("Structures").Preload("Groups").Preload("Others").First(&createdCustomer, customer.ID)
 
-	c.JSON(http.StatusCreated, createdCustomer)
+	// Mapping manual untuk response
+	response := dto.CustomerResponse{
+	    ID:               createdCustomer.ID,
+	    Name:             createdCustomer.Name,
+	    BrandName:        createdCustomer.BrandName,
+	    Code:             createdCustomer.Code,
+	    AccountManagerId: createdCustomer.AccountManagerId,
+	    Email:            createdCustomer.Email,
+	    Phone:            createdCustomer.Phone,
+	    Website:          createdCustomer.Website,
+	    Description:      createdCustomer.Description,
+	    Logo:             createdCustomer.Logo,
+	    LogoSmall:        createdCustomer.LogoSmall,
+	    Status:           createdCustomer.Status,
+	    Category:         createdCustomer.Category,
+	    Rating:           createdCustomer.Rating,
+	    AverageCost:      createdCustomer.AverageCost,
+	    CreatedAt:        createdCustomer.CreatedAt,
+	    UpdatedAt:        createdCustomer.UpdatedAt,
+	}
+
+	// Mapping addresses
+	for _, addr := range createdCustomer.Addresses {
+	    response.Addresses = append(response.Addresses, dto.AddressResponse{
+	        Name:    addr.Name,
+	        Address: addr.Address,
+	        IsMain:  addr.Main,
+	        Active:  addr.Active,
+	    })
+	}
+
+	// Mapping contacts
+	for _, contact := range createdCustomer.Contacts {
+	    response.Contacts = append(response.Contacts, dto.ContactResponse{
+	        Name:        contact.Name,
+	        JobPosition: contact.JobPosition,
+	        Email:       contact.Email,
+	        Phone:       contact.Phone,
+	        Active:      contact.Active,
+	    })
+	}
+
+	// Mapping others
+	for _, other := range createdCustomer.Others {
+	    var valueStr string
+	    if other.Value != nil {
+	        valueStr = *other.Value
+	    }
+	    response.Others = append(response.Others, dto.OtherResponse{
+	        Key:    other.Key,
+	        Value:  valueStr,
+	        Active: other.Active,
+	    })
+	}
+
+	c.JSON(http.StatusCreated, response)
 }
 
 // @Summary Get customer by ID
