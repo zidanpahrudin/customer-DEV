@@ -313,23 +313,23 @@ func CreateCustomer(c *gin.Context) {
 
 	// Handle groups (industry and parent group)
 	// Note: This assumes groups already exist in the database
-	for _, group := range req.Groups {
-		if group.IndustryID != "" && group.IndustryActive {
-			// Find industry group and associate
-			var industryGroup entity.Group
-			if err := tx.Where("id = ?", group.IndustryID).First(&industryGroup).Error; err == nil {
-				tx.Model(&customer).Association("Groups").Append(&industryGroup)
-			}
-		}
-
-		if group.ParentGroupID != "" && group.ParentGroupActive {
-			// Find parent group and associate
-			var parentGroup entity.Group
-			if err := tx.Where("id = ?", group.ParentGroupID).First(&parentGroup).Error; err == nil {
-				tx.Model(&customer).Association("Groups").Append(&parentGroup)
-			}
-		}
+	// Hapus: for _, group := range req.Groups {
+	if req.Groups.IndustryID != "" && req.Groups.IndustryActive {
+	// Find industry group and associate
+	var industryGroup entity.Group
+	if err := tx.Where("id = ?", req.Groups.IndustryID).First(&industryGroup).Error; err == nil {
+		tx.Model(&customer).Association("Groups").Append(&industryGroup)
 	}
+	}
+	
+	if req.Groups.ParentGroupID != "" && req.Groups.ParentGroupActive {
+	// Find parent group and associate
+	var parentGroup entity.Group
+	if err := tx.Where("id = ?", req.Groups.ParentGroupID).First(&parentGroup).Error; err == nil {
+		tx.Model(&customer).Association("Groups").Append(&parentGroup)
+	}
+	}
+	// Hapus: }
 
 	// Commit transaction
 	if err := tx.Commit().Error; err != nil {

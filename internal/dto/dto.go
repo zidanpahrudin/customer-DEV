@@ -84,17 +84,17 @@ type CustomerResponse = Customer
 // CreateCustomerRequest represents comprehensive customer creation request
 type CreateCustomerRequest struct {
 	Name             string                   `json:"name" binding:"required"`
-	BrandName        string                   `json:"brandName"`  // Ubah dari brand_name ke brandName
+	BrandName        string                   `json:"brandName"`
 	Code             string                   `json:"code"`
-	AccountManagerId string                   `json:"accountManagerId"` // Ubah dari account_manager_id ke accountManagerId
+	AccountManagerId string                   `json:"accountManagerId"`
 	Logo             *string                  `json:"logo"`
-	LogoSmall        *string                  `json:"logoSmall"` // Field baru untuk logo kecil
+	LogoSmall        *string                  `json:"logoSmall"`
 	StatusName       string                   `json:"status_name"`
 	Addresses        []CreateAddressRequest   `json:"addresses,omitempty"`
 	Socials          []CreateSocialRequest    `json:"socials,omitempty"`
 	Contacts         []CreateContactRequest   `json:"contacts,omitempty"`
 	Structures       []CreateStructureRequest `json:"structures,omitempty"`
-	Groups           []CreateGroupsRequest    `json:"groups,omitempty"`
+	Groups           CreateGroupsRequest      `json:"groups,omitempty"` // Ubah dari []CreateGroupsRequest ke CreateGroupsRequest
 	Others           []CreateOtherRequest     `json:"others,omitempty"`
 }
 
