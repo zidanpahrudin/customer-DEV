@@ -118,7 +118,7 @@ func main() {
 		protected.POST("/activities", handler.CreateActivity)
 		protected.GET("/activities", handler.GetActivities)
 		protected.GET("/activities/:id", handler.GetActivity)
-		protected.PUT("/activities/:id", handler.UpdateActivity) // Hapus baris ini
+		// Hapus baris: protected.PUT("/activities/:id", handler.UpdateActivity) - fungsi tidak ada
 		protected.DELETE("/activities/:id", handler.DeleteActivity)
 
 		// Activity attendees routes
@@ -128,8 +128,7 @@ func main() {
 		// Activity check-in routes
 		protected.POST("/activities/:id/checkin", handler.CheckinActivity)
 
-		// Customer-specific activity routes
-		protected.PUT("/customers/:customer_id/activities/:id", handler.UpdateActivityByCustomer)
+		// Hapus baris: protected.PUT("/customers/:customer_id/activities/:id", handler.UpdateActivityByCustomer) - konflik routing
 
 		// Invoice routes
 		/* 		protected.POST("/invoices", handler.CreateInvoice)
