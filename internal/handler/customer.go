@@ -315,19 +315,19 @@ func CreateCustomer(c *gin.Context) {
 	// Note: This assumes groups already exist in the database
 	// Hapus: for _, group := range req.Groups {
 	if req.Groups.IndustryID != "" && req.Groups.IndustryActive {
-	// Find industry group and associate
-	var industryGroup entity.Group
-	if err := tx.Where("id = ?", req.Groups.IndustryID).First(&industryGroup).Error; err == nil {
-		tx.Model(&customer).Association("Groups").Append(&industryGroup)
+		// Find industry group and associate
+		var industryGroup entity.Group
+		if err := tx.Where("id = ?", req.Groups.IndustryID).First(&industryGroup).Error; err == nil {
+			tx.Model(&customer).Association("Groups").Append(&industryGroup)
+		}
 	}
-	}
-	
+
 	if req.Groups.ParentGroupID != "" && req.Groups.ParentGroupActive {
-	// Find parent group and associate
-	var parentGroup entity.Group
-	if err := tx.Where("id = ?", req.Groups.ParentGroupID).First(&parentGroup).Error; err == nil {
-		tx.Model(&customer).Association("Groups").Append(&parentGroup)
-	}
+		// Find parent group and associate
+		var parentGroup entity.Group
+		if err := tx.Where("id = ?", req.Groups.ParentGroupID).First(&parentGroup).Error; err == nil {
+			tx.Model(&customer).Association("Groups").Append(&parentGroup)
+		}
 	}
 	// Hapus: }
 
@@ -343,57 +343,57 @@ func CreateCustomer(c *gin.Context) {
 
 	// Mapping manual untuk response
 	response := dto.CustomerResponse{
-	    ID:               createdCustomer.ID,
-	    Name:             createdCustomer.Name,
-	    BrandName:        createdCustomer.BrandName,
-	    Code:             createdCustomer.Code,
-	    AccountManagerId: createdCustomer.AccountManagerId,
-	    Email:            createdCustomer.Email,
-	    Phone:            createdCustomer.Phone,
-	    Website:          createdCustomer.Website,
-	    Description:      createdCustomer.Description,
-	    Logo:             createdCustomer.Logo,
-	    LogoSmall:        createdCustomer.LogoSmall,
-	    Status:           createdCustomer.Status,
-	    Category:         createdCustomer.Category,
-	    Rating:           createdCustomer.Rating,
-	    AverageCost:      createdCustomer.AverageCost,
-	    CreatedAt:        createdCustomer.CreatedAt,
-	    UpdatedAt:        createdCustomer.UpdatedAt,
+		ID:               createdCustomer.ID,
+		Name:             createdCustomer.Name,
+		BrandName:        createdCustomer.BrandName,
+		Code:             createdCustomer.Code,
+		AccountManagerId: createdCustomer.AccountManagerId,
+		/*  Email:            createdCustomer.Email,
+		    Phone:            createdCustomer.Phone,
+		    Website:          createdCustomer.Website,
+		    Description:      createdCustomer.Description, */
+		Logo:        createdCustomer.Logo,
+		LogoSmall:   createdCustomer.LogoSmall,
+		Status:      createdCustomer.Status,
+		Category:    createdCustomer.Category,
+		Rating:      createdCustomer.Rating,
+		AverageCost: createdCustomer.AverageCost,
+		CreatedAt:   createdCustomer.CreatedAt,
+		UpdatedAt:   createdCustomer.UpdatedAt,
 	}
 
 	// Mapping addresses
 	for _, addr := range createdCustomer.Addresses {
-	    response.Addresses = append(response.Addresses, dto.AddressResponse{
-	        Name:    addr.Name,
-	        Address: addr.Address,
-	        IsMain:  addr.Main,
-	        Active:  addr.Active,
-	    })
+		response.Addresses = append(response.Addresses, dto.AddressResponse{
+			Name:    addr.Name,
+			Address: addr.Address,
+			IsMain:  addr.Main,
+			Active:  addr.Active,
+		})
 	}
 
 	// Mapping contacts
 	for _, contact := range createdCustomer.Contacts {
-	    response.Contacts = append(response.Contacts, dto.ContactResponse{
-	        Name:        contact.Name,
-	        JobPosition: contact.JobPosition,
-	        Email:       contact.Email,
-	        Phone:       contact.Phone,
-	        Active:      contact.Active,
-	    })
+		response.Contacts = append(response.Contacts, dto.ContactResponse{
+			Name:        contact.Name,
+			JobPosition: contact.JobPosition,
+			Email:       contact.Email,
+			Phone:       contact.Phone,
+			Active:      contact.Active,
+		})
 	}
 
 	// Mapping others
 	for _, other := range createdCustomer.Others {
-	    var valueStr string
-	    if other.Value != nil {
-	        valueStr = *other.Value
-	    }
-	    response.Others = append(response.Others, dto.OtherResponse{
-	        Key:    other.Key,
-	        Value:  valueStr,
-	        Active: other.Active,
-	    })
+		var valueStr string
+		if other.Value != nil {
+			valueStr = *other.Value
+		}
+		response.Others = append(response.Others, dto.OtherResponse{
+			Key:    other.Key,
+			Value:  valueStr,
+			Active: other.Active,
+		})
 	}
 
 	c.JSON(http.StatusCreated, response)

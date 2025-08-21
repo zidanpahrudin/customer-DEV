@@ -28,11 +28,11 @@ type ErrorResponse struct {
 
 // CustomerRequest represents customer creation/update request
 type CustomerRequest struct {
-	Name        string  `json:"name" binding:"required" example:"PT Teknologi Maju"`
-	Email       string  `json:"email" example:"info@teknologimaju.com"`
-	Phone       string  `json:"phone" example:"021-12345678"`
-	Website     string  `json:"website" example:"https://teknologimaju.com"`
-	Description string  `json:"description" example:"Perusahaan teknologi informasi"`
+	Name string `json:"name" binding:"required" example:"PT Teknologi Maju"`
+	/* Email       string  `json:"email" example:"info@teknologimaju.com"` */
+	/* Phone       string  `json:"phone" example:"021-12345678"`
+	Website     string  `json:"website" example:"https://teknologimaju.com"` */
+	/* Description string  `json:"description" example:"Perusahaan teknologi informasi"` */
 	Status      string  `json:"status" example:"Active"`
 	Category    string  `json:"category" example:"Technology"`
 	Rating      float64 `json:"rating" example:"4.5"`
@@ -63,14 +63,15 @@ type User struct {
 
 // Customer represents customer data
 type Customer struct {
-	ID          uint    `json:"id" example:"1"`
-	Name        string  `json:"name" example:"PT Teknologi Maju"`
-	BrandName   string  `json:"brand_name" example:"TechMaju"`
-	Code        string  `json:"code" example:"TM001"`
-	Email       string  `json:"email" example:"info@teknologimaju.com"`
+	ID        uint   `json:"id" example:"1"`
+	Name      string `json:"name" example:"PT Teknologi Maju"`
+	BrandName string `json:"brand_name" example:"TechMaju"`
+	Code      string `json:"code" example:"TM001"`
+	/* Email       string  `json:"email" example:"info@teknologimaju.com"`
 	Phone       string  `json:"phone" example:"021-12345678"`
-	Website     string  `json:"website" example:"https://teknologimaju.com"`
-	Description string  `json:"description" example:"Perusahaan teknologi informasi"`
+	Website     string  `json:"website" example:"https://teknologimaju.com"` */
+	/* Description string  `json:"description" example:"Perusahaan teknologi informasi"` */
+	Logo        string  `json:"logo" example:"uploads/logos/logo_1.png"`
 	LogoSmall   string  `json:"logo_small" example:"uploads/logos_small/logo_small_1.png"` // Field baru untuk logo kecil
 	Status      string  `json:"status" example:"Active"`
 	Category    string  `json:"category" example:"Technology"`
@@ -80,26 +81,26 @@ type Customer struct {
 
 // CustomerResponse represents customer with simplified relations
 type CustomerResponse struct {
-	ID               uint              `json:"id" example:"1"`
-	Name             string            `json:"name" example:"PT Teknologi Maju"`
-	BrandName        string            `json:"brand_name" example:"TechMaju"`
-	Code             string            `json:"code" example:"TM001"`
-	AccountManagerId string            `json:"account_manager_id" example:"1"`
-	Email            string            `json:"email" example:"info@teknologimaju.com"`
+	ID               uint   `json:"id" example:"1"`
+	Name             string `json:"name" example:"PT Teknologi Maju"`
+	BrandName        string `json:"brand_name" example:"TechMaju"`
+	Code             string `json:"code" example:"TM001"`
+	AccountManagerId string `json:"account_manager_id" example:"1"`
+	/* Email            string            `json:"email" example:"info@teknologimaju.com"`
 	Phone            string            `json:"phone" example:"021-12345678"`
 	Website          string            `json:"website" example:"https://teknologimaju.com"`
-	Description      string            `json:"description" example:"Perusahaan teknologi informasi"`
-	Logo             string            `json:"logo" example:"uploads/logos/logo_1.png"`
-	LogoSmall        string            `json:"logo_small" example:"uploads/logos_small/logo_small_1.png"`
-	Status           string            `json:"status" example:"Active"`
-	Category         string            `json:"category" example:"Technology"`
-	Rating           float64           `json:"rating" example:"4.5"`
-	AverageCost      float64           `json:"average_cost" example:"50000000"`
-	CreatedAt        time.Time         `json:"created_at"`
-	UpdatedAt        time.Time         `json:"updated_at"`
-	Addresses        []AddressResponse `json:"addresses,omitempty"`
-	Contacts         []ContactResponse `json:"contacts,omitempty"`
-	Others           []OtherResponse   `json:"others,omitempty"`
+	Description      string            `json:"description" example:"Perusahaan teknologi informasi"` */
+	Logo        string            `json:"logo" example:"uploads/logos/logo_1.png"`
+	LogoSmall   string            `json:"logo_small" example:"uploads/logos_small/logo_small_1.png"`
+	Status      string            `json:"status" example:"Active"`
+	Category    string            `json:"category" example:"Technology"`
+	Rating      float64           `json:"rating" example:"4.5"`
+	AverageCost float64           `json:"average_cost" example:"50000000"`
+	CreatedAt   time.Time         `json:"created_at"`
+	UpdatedAt   time.Time         `json:"updated_at"`
+	Addresses   []AddressResponse `json:"addresses,omitempty"`
+	Contacts    []ContactResponse `json:"contacts,omitempty"`
+	Others      []OtherResponse   `json:"others,omitempty"`
 }
 
 // CreateCustomerRequest represents comprehensive customer creation request

@@ -40,24 +40,24 @@ type User struct {
 // Customer model - update untuk menambahkan field baru
 // Customer model - update untuk menambahkan field baru
 type Customer struct {
-	ID               uint           `json:"id" gorm:"primaryKey"`
-	Name             string         `json:"name" gorm:"not null"`
-	BrandName        string         `json:"brand_name"`
-	Code             string         `json:"code" gorm:"unique"`
-	AccountManagerId string         `json:"account_manager_id"`
-	Email            string         `json:"email"`
-	Phone            string         `json:"phone"`
-	Website          string         `json:"website"`
-	Description      string         `json:"description"`
-	Logo             string         `json:"logo"`
-	LogoSmall        string         `json:"logo_small"` // Field baru untuk logo kecil
-	Status           string         `json:"status" gorm:"default:'Active'"` // Status internal
-	Category         string         `json:"category"`
-	Rating           float64        `json:"rating" gorm:"default:0"`
-	AverageCost      float64        `json:"average_cost" gorm:"default:0"`
-	CreatedAt        time.Time      `json:"created_at"`
-	UpdatedAt        time.Time      `json:"updated_at"`
-	DeletedAt        gorm.DeletedAt `json:"-" gorm:"index"`
+	ID               uint   `json:"id" gorm:"primaryKey"`
+	Name             string `json:"name" gorm:"not null"`
+	BrandName        string `json:"brand_name"`
+	Code             string `json:"code" gorm:"unique"`
+	AccountManagerId string `json:"account_manager_id"`
+	/* Email            string         `json:"email"`
+	Phone            string         `json:"phone"` */
+	/* Website string `json:"website"` */
+	/* Description      string         `json:"description"` */
+	Logo        string         `json:"logo"`
+	LogoSmall   string         `json:"logo_small"`                     // Field baru untuk logo kecil
+	Status      string         `json:"status" gorm:"default:'Active'"` // Status internal
+	Category    string         `json:"category"`
+	Rating      float64        `json:"rating" gorm:"default:0"`
+	AverageCost float64        `json:"average_cost" gorm:"default:0"`
+	CreatedAt   time.Time      `json:"created_at"`
+	UpdatedAt   time.Time      `json:"updated_at"`
+	DeletedAt   gorm.DeletedAt `json:"-" gorm:"index"`
 
 	// Relations
 	Addresses  []Address   `json:"addresses,omitempty" gorm:"foreignKey:CustomerID"`
@@ -72,21 +72,21 @@ type Customer struct {
 // Address model - update untuk menambahkan field name dan active
 // Address model
 type Address struct {
-	ID         uint           `json:"id" gorm:"primaryKey"`
-	CustomerID uint           `json:"customer_id" gorm:"not null"`
+	ID         uint `json:"id" gorm:"primaryKey"`
+	CustomerID uint `json:"customer_id" gorm:"not null"`
 	// SupplierID *uint          `json:"supplier_id"` // HAPUS field ini
-	Name       string         `json:"name" gorm:"not null"`
-	Street     string         `json:"street"`
-	Address    string         `json:"address" gorm:"not null"`
-	City       string         `json:"city"`
+	Name string `json:"name" gorm:"not null"`
+	/* Street     string         `json:"street"` */
+	Address string `json:"address" gorm:"not null"`
+	/* City       string         `json:"city"`
 	State      string         `json:"state"`
-	Country    string         `json:"country"`
-	PostalCode string         `json:"postal_code"`
-	Main       bool           `json:"main" gorm:"default:false"`
-	Active     bool           `json:"active" gorm:"default:true"`
-	CreatedAt  time.Time      `json:"created_at"`
-	UpdatedAt  time.Time      `json:"updated_at"`
-	DeletedAt  gorm.DeletedAt `json:"-" gorm:"index"`
+	Country    string         `json:"country"` */
+	/* PostalCode string         `json:"postal_code"` */
+	Main      bool           `json:"main" gorm:"default:false"`
+	Active    bool           `json:"active" gorm:"default:true"`
+	CreatedAt time.Time      `json:"created_at"`
+	UpdatedAt time.Time      `json:"updated_at"`
+	DeletedAt gorm.DeletedAt `json:"-" gorm:"index"`
 
 	// Relations - hilangkan dari JSON response
 	Customer Customer `json:"-" gorm:"foreignKey:CustomerID"`
