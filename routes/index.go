@@ -9,6 +9,7 @@ import (
 )
 
 func RegisterRoutes(r *gin.Engine) {
+
 	// Public routes
 	r.POST("/register", handler.Register)
 	r.POST("/login", handler.Login)
@@ -30,4 +31,8 @@ func RegisterRoutes(r *gin.Engine) {
 	route.RegisterInvoiceRoutes(protected)
 	route.RegisterPaymentRoutes(protected)
 	route.RegisterStatusRoutes(protected)
+	route.RegisterEventsRoutes(protected)
+	route.RegisterActivityTypeRoutes(protected)
+
+	
 }

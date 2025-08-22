@@ -28,3 +28,11 @@ type Event struct {
 	EventAttendees []EventAttendee `json:"event_attendees,omitempty" gorm:"foreignKey:EventID"`
 	Project Project `json:"project,omitempty" gorm:"foreignKey:ProjectID"`
 }
+
+// auto generate id
+func (e *Event) BeforeCreate(tx *gorm.DB) (err error) {
+    if e.ID == 0 {
+        e.ID = uint(time.Now().Unix()) // pakai detik, aman untuk BIGINT
+    }
+    return nil
+}

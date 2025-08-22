@@ -50,20 +50,28 @@ func ConnectDatabase() {
 	// Drop tabel dengan foreign key terlebih dahulu
 	if !isProd {
     tables := []interface{}{
-        &entity.Status{},
-        &entity.Payment{},
-        &entity.Invoice{},
-        &entity.ActivityCheckin{},
-        &entity.ActivityAttendee{},
         &entity.Activity{},
-        &entity.User{},
-        &entity.Address{},
-        &entity.Sosmed{},
-        &entity.Contact{},
-        &entity.Structure{},
-        &entity.Other{},
-        &entity.Customer{},
-        &entity.Role{},
+		&entity.ActivityAttendee{},
+		&entity.ActivityCheckin{},
+		&entity.ActivityType{},
+		&entity.Address{},
+		&entity.Contact{},
+		&entity.Customer{},
+		&entity.Document{},
+		&entity.Event{},
+		&entity.EventAttendee{},
+		&entity.Group{},
+		&entity.Invoice{},
+		&entity.Other{},
+		&entity.Payment{},
+		&entity.Project{},
+		&entity.Role{},
+		&entity.Sosmed{},
+		&entity.Status{},
+		&entity.StatusReasons{},
+		&entity.Structure{},
+		&entity.User{},
+		
     }
     for _, t := range tables {
         _ = DB.Migrator().DropTable(t)
@@ -73,25 +81,27 @@ func ConnectDatabase() {
 
 	// Auto migrate the schema - akan membuat tabel sesuai model Go
 	err = DB.AutoMigrate(
-		&entity.Role{},
-		&entity.User{},
-		&entity.Customer{},
-		&entity.Address{},
-		&entity.Sosmed{},
-		&entity.Contact{},
-		&entity.Structure{},
-		&entity.Group{},
-		&entity.Other{},
 		&entity.Activity{},
-		&entity.ActivityCheckin{},
 		&entity.ActivityAttendee{},
+		&entity.ActivityCheckin{},
+		&entity.ActivityType{},
+		&entity.Address{},
+		&entity.Contact{},
+		&entity.Customer{},
+		&entity.Document{},
+		&entity.Event{},
+		&entity.EventAttendee{},
+		&entity.Group{},
 		&entity.Invoice{},
+		&entity.Other{},
 		&entity.Payment{},
+		&entity.Project{},
+		&entity.Role{},
+		&entity.Sosmed{},
 		&entity.Status{},
 		&entity.StatusReasons{},
-		&entity.Document{},
-		
-
+		&entity.Structure{},
+		&entity.User{},
 		
 	)
 	if err != nil {
