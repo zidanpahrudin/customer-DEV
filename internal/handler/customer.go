@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
-
+	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -437,3 +437,134 @@ func UploadCustomerLogo(c *gin.Context) {
 		"customer":  customer,
 	})
 }
+
+
+// @Summary Update block Customer status
+// @Description Update the status of a customer to Blocked
+// @Tags Customers
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path int true "Customer ID"
+// @Success 200 {object} dto.Customer
+// @Failure 401 {object} dto.ErrorResponse
+// @Failure 404 {object} dto.ErrorResponse
+// @Router /api/customers/status/{id} [post]
+func UpdateCustomerStatus(c *gin.Context) {
+
+	// Ambil user_id dari context
+	userID, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found in context"})
+		return
+	}
+
+	uid, ok := userID.(uint)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user ID in token"})
+		return
+	}
+
+	id := c.Param("id")
+	status := c.PostForm("status")   // ambil status dari form
+	reason := c.PostForm("reason")   // alasan perubahan status
+	notes := c.PostForm("notes")     // catatan untuk dokumen
+
+	// Validasi status
+	if status != "active" && status != "blocked" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid status"})
+		return
+	}
+
+	// Cari customer
+	var customer entity.Customer
+	if err := config.DB.First(&customer, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Customer not found"})
+		return
+	}
+
+	// Simpan reason ke StatusReasons
+	statusReason := entity.StatusReasons{
+		CustomerID: customer.ID,
+		Reason:     reason,
+		Status:     status,
+	}
+	config.DB.Create(&statusReason)
+
+	// Handle file upload
+	file, err := c.FormFile("file")
+	var document entity.Document
+	if err == nil { // kalau ada file
+		// Simpan file ke folder uploads/
+		filePath := fmt.Sprintf("uploads/documents/%d_%s", customer.ID, file.Filename)
+		if err := c.SaveUploadedFile(file, filePath); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to upload file"})
+			return
+		}
+
+		// Simpan record document
+		document = entity.Document{
+			CustomerID: customer.ID,
+			UserID:		uid,
+			Notes:      notes,
+			Type:       "StatusChange",
+			URLFile:    filePath,
+		}
+		config.DB.Create(&document)
+	}
+
+	// Response
+	c.JSON(http.StatusOK, gin.H{
+		"message":       "Customer status updated to " + status,
+		"customer":      customer,
+		"status_reason": statusReason,
+		"document":      document,
+	})
+}
+
+
+// @Summary Get Customer Status Reason And Document
+// @Description Get the status reason and document for a customer
+// @Tags Customers
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path int true "Customer ID"
+// @Success 200 {object} dto.CustomerStatusResponse
+// @Failure 401 {object} dto.ErrorResponse
+// @Failure 404 {object} dto.ErrorResponse
+// @Router /api/customers/status/{id} [get]
+func GetCustomerStatus(c *gin.Context) {
+	id := c.Param("id")
+
+	// Cari customer
+	var customer entity.Customer
+	if err := config.DB.First(&customer, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Customer not found"})
+		return
+	}
+
+	// Ambil status reasons
+	var statusReasons []entity.StatusReasons
+	if err := config.DB.Where("customer_id = ? AND is_active = ?", customer.ID, true).Find(&statusReasons).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch status reasons"})
+		return
+	}
+
+	// Ambil documents terkait status perubahan
+	var documents []entity.Document
+	if err := config.DB.Where("customer_id = ? AND is_active = ?", customer.ID, true).Find(&documents).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch documents"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message":       "Success Get Customer status",
+		"customer":      customer,
+		"StatusReasons": statusReasons,
+		"document":      documents,
+	})
+}
+
+
+

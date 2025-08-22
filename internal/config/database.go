@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	"customer-api/internal/entity"
 
@@ -43,24 +44,32 @@ func ConnectDatabase() {
 
 	fmt.Println("Starting auto migration...")
 
+
+	isProd, _ := strconv.ParseBool(os.Getenv("IS_PRODUCTION"))
 	// Drop semua tabel yang bermasalah untuk memastikan skema bersih
 	// Drop tabel dengan foreign key terlebih dahulu
-	if(os.Getenv("IS_PRODUCTION") == false) {
-		DB.Migrator().DropTable(&entity.Status{})     // Tambahkan ini
-		DB.Migrator().DropTable(&entity.Payment{})    // Tambahkan ini
-		DB.Migrator().DropTable(&entity.Invoice{})    // Tambahkan ini
-		DB.Migrator().DropTable(&entity.ActivityCheckin{})
-		DB.Migrator().DropTable(&entity.ActivityAttendee{})
-		DB.Migrator().DropTable(&entity.Activity{})
-		DB.Migrator().DropTable(&entity.User{})
-		DB.Migrator().DropTable(&entity.Address{})
-		DB.Migrator().DropTable(&entity.Sosmed{})
-		DB.Migrator().DropTable(&entity.Contact{})
-		DB.Migrator().DropTable(&entity.Structure{})
-		DB.Migrator().DropTable(&entity.Other{})
-		DB.Migrator().DropTable(&entity.Customer{})
-		DB.Migrator().DropTable(&entity.Role{})
-	}
+	if !isProd {
+    tables := []interface{}{
+        &entity.Status{},
+        &entity.Payment{},
+        &entity.Invoice{},
+        &entity.ActivityCheckin{},
+        &entity.ActivityAttendee{},
+        &entity.Activity{},
+        &entity.User{},
+        &entity.Address{},
+        &entity.Sosmed{},
+        &entity.Contact{},
+        &entity.Structure{},
+        &entity.Other{},
+        &entity.Customer{},
+        &entity.Role{},
+    }
+    for _, t := range tables {
+        _ = DB.Migrator().DropTable(t)
+    }
+}
+
 
 	// Auto migrate the schema - akan membuat tabel sesuai model Go
 	err = DB.AutoMigrate(
@@ -78,7 +87,12 @@ func ConnectDatabase() {
 		&entity.ActivityAttendee{},
 		&entity.Invoice{},
 		&entity.Payment{},
-		&entity.Status{}, // Status harus setelah Customer
+		&entity.Status{},
+		&entity.StatusReasons{},
+		&entity.Document{},
+		
+
+		
 	)
 	if err != nil {
 		log.Fatal("Failed to migrate database:", err)

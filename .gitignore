@@ -1,0 +1,41 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+*.o
+*.a
+
+# Go build output
+/bin/
+/tmp/
+/dist/
+
+# Air (hot reload)
+.air.toml
+tmp/
+
+# Logs
+*.log
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS / Misc
+.DS_Store
+Thumbs.db
+
+# Env / Secrets
+.env
+.env.local
+.env.*.local
+
+# Swagger docs (kalau generate)
+docs/swagger/*
+!docs/swagger/.gitkeep

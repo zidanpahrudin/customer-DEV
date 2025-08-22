@@ -1,0 +1,39 @@
+package entity
+
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
+
+// Customer model - update untuk menambahkan field baru
+// Customer model - update untuk menambahkan field baru
+type Customer struct {
+	ID               uint           `json:"id" gorm:"primaryKey"`
+	Name             string         `json:"name" gorm:"not null"`
+	BrandName        string         `json:"brand_name"`
+	Code             string         `json:"code" gorm:"unique"`
+	AccountManagerId string         `json:"account_manager_id"`
+	Email            string         `json:"email"`
+	Phone            string         `json:"phone"`
+	Website          string         `json:"website"`
+	Description      string         `json:"description"`
+	Logo             string         `json:"logo"`
+	Status           string         `json:"status" gorm:"default:'Active'"` // Status internal
+	Category         string         `json:"category"`
+	Rating           float64        `json:"rating" gorm:"default:0"`
+	AverageCost      float64        `json:"average_cost" gorm:"default:0"`
+	CreatedAt        time.Time      `json:"created_at"`
+	UpdatedAt        time.Time      `json:"updated_at"`
+	DeletedAt        gorm.DeletedAt `json:"-" gorm:"index"`
+
+	// Relations
+	Addresses  []Address   `json:"addresses,omitempty" gorm:"foreignKey:CustomerID"`
+	Sosmeds    []Sosmed    `json:"sosmeds,omitempty" gorm:"foreignKey:CustomerID"`
+	Contacts   []Contact   `json:"contacts,omitempty" gorm:"foreignKey:CustomerID"`
+	Structures []Structure `json:"structures,omitempty" gorm:"foreignKey:CustomerID"`
+	Groups     []Group     `json:"groups,omitempty" gorm:"many2many:customer_groups;"`
+	Others     []Other     `json:"others,omitempty" gorm:"foreignKey:CustomerID"`
+	Activities []Activity  `json:"activities,omitempty" gorm:"foreignKey:CustomerID"`
+	Events     []Event     `json:"events,omitempty" gorm:"foreignKey:CustomerID"`
+}
