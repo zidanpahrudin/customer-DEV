@@ -71,6 +71,12 @@ func ConnectDatabase() {
 		&entity.StatusReasons{},
 		&entity.Structure{},
 		&entity.User{},
+		&entity.Stages{},
+		&entity.StagesDetail{},
+		&entity.Workflows{},
+		&entity.WorkflowsDetail{},
+		&entity.GroupConfig{},
+		&entity.GroupConfigDetail{},
 		
     }
     for _, t := range tables {
@@ -102,6 +108,12 @@ func ConnectDatabase() {
 		&entity.StatusReasons{},
 		&entity.Structure{},
 		&entity.User{},
+		&entity.Stages{},
+		&entity.StagesDetail{},
+		&entity.Workflows{},
+		&entity.WorkflowsDetail{},
+		&entity.GroupConfig{},
+		&entity.GroupConfigDetail{},
 		
 	)
 	if err != nil {

@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 	"fmt"
+	"gorm.io/gorm"
 	"github.com/gin-gonic/gin"
 )
 
@@ -68,99 +69,6 @@ func GetCustomers(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-//
-//	@Param customer body dto.CreateCustomerRequest true "Customer data" SchemaExample({
-//	  "name": "PT Digital Inovasi Indonesia",
-//	  "brandName": "DigiInno",
-//	  "code": "DIGI",
-//	  "accountManagerId": "AM-001",
-//	  "logo": null,
-//	  "addresses": [
-//	    {
-//	      "name": "Head Office",
-//	      "address": "Jl. Sudirman No. 123, Jakarta Selatan",
-//	      "isMain": true,
-//	      "active": true
-//	    },
-//	    {
-//	      "name": "Branch Office",
-//	      "address": "Jl. Asia Afrika No. 45, Bandung",
-//	      "isMain": false,
-//	      "active": true
-//	    }
-//	  ],
-//	  "socials": [
-//	    {
-//	      "platform": "Instagram",
-//	      "handle": "@digiinno_id",
-//	      "active": true
-//	    },
-//	    {
-//	      "platform": "LinkedIn",
-//	      "handle": "digital-inovasi-indonesia",
-//	      "active": true
-//	    }
-//	  ],
-//	  "contacts": [
-//	    {
-//	      "name": "Budi Santoso",
-//	      "birthdate": "1985-03-15",
-//	      "jobPosition": "CEO",
-//	      "email": "budi@digiinno.com",
-//	      "phone": "021-5551234",
-//	      "mobile": "0812-3456-7890",
-//	      "isMain": true,
-//	      "active": true
-//	    },
-//	    {
-//	      "name": "Sari Dewi",
-//	      "birthdate": "1988-07-22",
-//	      "jobPosition": "CTO",
-//	      "email": "sari@digiinno.com",
-//	      "phone": "021-5551235",
-//	      "mobile": "0813-4567-8901",
-//	      "isMain": false,
-//	      "active": true
-//	    }
-//	  ],
-//	  "structures": [
-//	    {
-//	      "tempKey": "1",
-//	      "parentKey": null,
-//	      "name": "Board of Directors",
-//	      "level": 1,
-//	      "address": "Jakarta",
-//	      "active": true
-//	    },
-//	    {
-//	      "tempKey": "2",
-//	      "parentKey": "1",
-//	      "name": "Technology Division",
-//	      "level": 2,
-//	      "address": "Jakarta",
-//	      "active": true
-//	    }
-//	  ],
-//	  "groups": {
-//	    "industryId": "1",
-//	    "industryActive": true,
-//	    "parentGroupId": "2",
-//	    "parentGroupActive": true
-//	  },
-//	  "others": [
-//	    {
-//	      "key": "company_size",
-//	      "value": "50-100 employees",
-//	      "active": true
-//	    },
-//	    {
-//	      "key": "established_year",
-//	      "value": "2015",
-//	      "active": true
-//	    }
-//	  ]
-//	})
-//
 // @Success 201 {object} entity.Customer
 // @Failure 400 {object} dto.ErrorResponse
 // @Failure 401 {object} dto.ErrorResponse
@@ -567,4 +475,93 @@ func GetCustomerStatus(c *gin.Context) {
 }
 
 
+// @Summary Get customer statistics
+// @Description Get statistics about customers including total count, new customers in the last year, average cost, and blocked customers
+// @Tags Customers
+// @Param status query string false "Filter by status" Enums(Active, Inactive, Blocked)
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} dto.CustomerStatsResponse
+// @Failure 401 {object} dto.ErrorResponse
+// @Failure 500 {object} dto.ErrorResponse
+// @Router /api/customers/stats [get]
+func GetCustomerStats(c *gin.Context) {
+	status := c.Query("status")
+
+	// Helper: apply filter & range tahun
+	queryWithFilter := func(base *gorm.DB, status string, start, end *time.Time) *gorm.DB {
+		q := base
+		if status != "" {
+			q = q.Where("status = ?", status)
+		}
+		if start != nil && end != nil {
+			q = q.Where("created_at BETWEEN ? AND ?", *start, *end)
+		}
+		return q
+	}
+
+	// Periode
+	now := time.Now()
+	thisYearStart := now.AddDate(-1, 0, 0) // 1 tahun ke belakang
+	lastYearStart := now.AddDate(-2, 0, 0) // 2 tahun ke belakang
+	lastYearEnd := now.AddDate(-1, 0, 0)
+
+	var totalThisYear, totalLastYear int64
+	queryWithFilter(config.DB.Model(&entity.Customer{}), status, &thisYearStart, &now).
+		Count(&totalThisYear)
+	queryWithFilter(config.DB.Model(&entity.Customer{}), status, &lastYearStart, &lastYearEnd).
+		Count(&totalLastYear)
+
+	var newThisYear, newLastYear int64
+	queryWithFilter(config.DB.Model(&entity.Customer{}), status, &thisYearStart, &now).
+		Count(&newThisYear)
+	queryWithFilter(config.DB.Model(&entity.Customer{}), status, &lastYearStart, &lastYearEnd).
+		Count(&newLastYear)
+
+	var avgThisYear, avgLastYear float64
+	queryWithFilter(config.DB.Model(&entity.Customer{}), status, &thisYearStart, &now).
+		Select("COALESCE(AVG(average_cost), 0)").Row().Scan(&avgThisYear)
+	queryWithFilter(config.DB.Model(&entity.Customer{}), status, &lastYearStart, &lastYearEnd).
+		Select("COALESCE(AVG(average_cost), 0)").Row().Scan(&avgLastYear)
+
+	var churnThisYear, churnLastYear int64
+	queryWithFilter(config.DB.Model(&entity.Customer{}), status, nil, nil).
+		Where("last_transaction_at < ?", thisYearStart).Count(&churnThisYear)
+	queryWithFilter(config.DB.Model(&entity.Customer{}), status, nil, nil).
+		Where("last_transaction_at BETWEEN ? AND ?", lastYearStart, lastYearEnd).Count(&churnLastYear)
+
+	calcGrowth := func(thisYear, lastYear float64) float64 {
+		if lastYear == 0 {
+			if thisYear > 0 {
+				return 100.0
+			}
+			return 0
+		}
+		return ((thisYear - lastYear) / lastYear) * 100
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  "success",
+		"message": "Customer statistics fetched successfully",
+		"data": gin.H{
+			"total_customers": gin.H{
+				"value":  totalThisYear,
+				"growth": calcGrowth(float64(totalThisYear), float64(totalLastYear)),
+			},
+			"new_customers": gin.H{
+				"value":  newThisYear,
+				"growth": calcGrowth(float64(newThisYear), float64(newLastYear)),
+			},
+			"avg_revenue": gin.H{
+				"value":  avgThisYear,
+				"growth": calcGrowth(avgThisYear, avgLastYear),
+			},
+			"churn_customers": gin.H{
+				"value":  churnThisYear,
+				"growth": calcGrowth(float64(churnThisYear), float64(churnLastYear)),
+			},
+		},
+	})
+}
 

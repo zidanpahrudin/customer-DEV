@@ -7,6 +7,9 @@ import (
 )
 
 func RegisterCustomerRoutes(r *gin.RouterGroup) {
+
+	r.GET("/customers/statistics", handler.GetCustomerStats)
+
 	r.POST("/customers", handler.CreateCustomer)
 	r.GET("/customers", handler.GetCustomers)
 	r.GET("/customers/:id", handler.GetCustomer)
@@ -28,4 +31,6 @@ func RegisterCustomerRoutes(r *gin.RouterGroup) {
 	r.GET("/customers/:id/others", handler.GetCustomerOthers)
 	r.GET("/customers/:id/with-others", handler.GetCustomerWithOthers)
 	r.GET("/customers/:id/statuses", handler.GetCustomersByStatus)
+
+	
 }
