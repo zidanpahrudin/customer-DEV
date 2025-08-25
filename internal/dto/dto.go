@@ -28,11 +28,11 @@ type ErrorResponse struct {
 
 // CustomerRequest represents customer creation/update request
 type CustomerRequest struct {
-	Name        string  `json:"name" binding:"required" example:"PT Teknologi Maju"`
-	Email       string  `json:"email" example:"info@teknologimaju.com"`
-	Phone       string  `json:"phone" example:"021-12345678"`
-	Website     string  `json:"website" example:"https://teknologimaju.com"`
-	Description string  `json:"description" example:"Perusahaan teknologi informasi"`
+	Name string `json:"name" binding:"required" example:"PT Teknologi Maju"`
+	/* Email       string  `json:"email" example:"info@teknologimaju.com"` */
+	/* Phone       string  `json:"phone" example:"021-12345678"`
+	Website     string  `json:"website" example:"https://teknologimaju.com"` */
+	/* Description string  `json:"description" example:"Perusahaan teknologi informasi"` */
 	Status      string  `json:"status" example:"Active"`
 	Category    string  `json:"category" example:"Technology"`
 	Rating      float64 `json:"rating" example:"4.5"`
@@ -63,51 +63,75 @@ type User struct {
 
 // Customer represents customer data
 type Customer struct {
-	ID          uint    `json:"id" example:"1"`
-	Name        string  `json:"name" example:"PT Teknologi Maju"`
-	BrandName   string  `json:"brand_name" example:"TechMaju"`
-	Code        string  `json:"code" example:"TM001"`
-	Email       string  `json:"email" example:"info@teknologimaju.com"`
+	ID        uint   `json:"id" example:"1"`
+	Name      string `json:"name" example:"PT Teknologi Maju"`
+	BrandName string `json:"brand_name" example:"TechMaju"`
+	Code      string `json:"code" example:"TM001"`
+	/* Email       string  `json:"email" example:"info@teknologimaju.com"`
 	Phone       string  `json:"phone" example:"021-12345678"`
-	Website     string  `json:"website" example:"https://teknologimaju.com"`
-	Description string  `json:"description" example:"Perusahaan teknologi informasi"`
+	Website     string  `json:"website" example:"https://teknologimaju.com"` */
+	/* Description string  `json:"description" example:"Perusahaan teknologi informasi"` */
+	Logo        string  `json:"logo" example:"uploads/logos/logo_1.png"`
+	LogoSmall   string  `json:"logo_small" example:"uploads/logos_small/logo_small_1.png"` // Field baru untuk logo kecil
 	Status      string  `json:"status" example:"Active"`
 	Category    string  `json:"category" example:"Technology"`
 	Rating      float64 `json:"rating" example:"4.5"`
 	AverageCost float64 `json:"average_cost" example:"50000000"`
 }
 
-// CustomerResponse is an alias for Customer used in responses
-type CustomerResponse = Customer
+// CustomerResponse represents customer with simplified relations
+type CustomerResponse struct {
+	ID               uint   `json:"id" example:"1"`
+	Name             string `json:"name" example:"PT Teknologi Maju"`
+	BrandName        string `json:"brand_name" example:"TechMaju"`
+	Code             string `json:"code" example:"TM001"`
+	AccountManagerId string `json:"account_manager_id" example:"1"`
+	/* Email            string            `json:"email" example:"info@teknologimaju.com"`
+	Phone            string            `json:"phone" example:"021-12345678"`
+	Website          string            `json:"website" example:"https://teknologimaju.com"`
+	Description      string            `json:"description" example:"Perusahaan teknologi informasi"` */
+	Logo        string            `json:"logo" example:"uploads/logos/logo_1.png"`
+	LogoSmall   string            `json:"logo_small" example:"uploads/logos_small/logo_small_1.png"`
+	Status      string            `json:"status" example:"Active"`
+	Category    string            `json:"category" example:"Technology"`
+	Rating      float64           `json:"rating" example:"4.5"`
+	AverageCost float64           `json:"average_cost" example:"50000000"`
+	CreatedAt   time.Time         `json:"created_at"`
+	UpdatedAt   time.Time         `json:"updated_at"`
+	Addresses   []AddressResponse `json:"addresses,omitempty"`
+	Contacts    []ContactResponse `json:"contacts,omitempty"`
+	Others      []OtherResponse   `json:"others,omitempty"`
+}
 
 // CreateCustomerRequest represents comprehensive customer creation request
 type CreateCustomerRequest struct {
 	Name             string                   `json:"name" binding:"required"`
-	BrandName        string                   `json:"brandName"`  // Ubah dari brand_name ke brandName
+	BrandName        string                   `json:"brandName"`
 	Code             string                   `json:"code"`
-	AccountManagerId string                   `json:"accountManagerId"` // Ubah dari account_manager_id ke accountManagerId
+	AccountManagerId string                   `json:"accountManagerId"`
 	Logo             *string                  `json:"logo"`
+	LogoSmall        *string                  `json:"logoSmall"`
 	StatusName       string                   `json:"status_name"`
 	Addresses        []CreateAddressRequest   `json:"addresses,omitempty"`
 	Socials          []CreateSocialRequest    `json:"socials,omitempty"`
 	Contacts         []CreateContactRequest   `json:"contacts,omitempty"`
 	Structures       []CreateStructureRequest `json:"structures,omitempty"`
-	Groups           []CreateGroupsRequest    `json:"groups,omitempty"`
+	Groups           CreateGroupsRequest      `json:"groups,omitempty"` // Ubah dari []CreateGroupsRequest ke CreateGroupsRequest
 	Others           []CreateOtherRequest     `json:"others,omitempty"`
 }
 
 // CreateAddressRequest represents address creation in customer request
 type CreateAddressRequest struct {
-	CustomerID uint   `json:"customer_id" binding:"required"`
-	Name       string `json:"name" binding:"required" example:"Head Office"`
-	Address    string `json:"address" binding:"required" example:"Jl. Sudirman No. 123, Jakarta Selatan"`
-	IsMain     bool   `json:"isMain" example:"true"`
-	Active     bool   `json:"active" example:"true"`
+	// CustomerID uint   `json:"customer_id" binding:"required"` // Hapus field ini
+	Name    string `json:"name" binding:"required" example:"Head Office"`
+	Address string `json:"address" binding:"required" example:"Jl. Sudirman No. 123, Jakarta Selatan"`
+	IsMain  bool   `json:"isMain" example:"true"`
+	Active  bool   `json:"active" example:"true"`
 }
 
 // CreateSocialRequest represents social media creation in customer request
 type CreateSocialRequest struct {
-	Name     string `json:"name" binding:"required" example:"Instagram"`
+	// Name     string `json:"name" binding:"required" example:"Instagram"` // Hapus field ini karena duplikat dengan Platform
 	Platform string `json:"platform" binding:"required" example:"Instagram"`
 	Handle   string `json:"handle" binding:"required" example:"@digiinno_id"`
 	Active   bool   `json:"active" example:"true"`
@@ -115,7 +139,7 @@ type CreateSocialRequest struct {
 
 // CreateContactRequest represents contact creation in customer request
 type CreateContactRequest struct {
-	CustomerID  uint   `json:"customer_id" binding:"required"`
+	// CustomerID  uint   `json:"customer_id" binding:"required"` // Hapus field ini
 	Name        string `json:"name" binding:"required" example:"Budi Santoso"`
 	Birthdate   string `json:"birthdate" example:"1985-03-15"`
 	JobPosition string `json:"jobPosition" example:"CEO"`
@@ -128,13 +152,13 @@ type CreateContactRequest struct {
 
 // CreateStructureRequest represents structure creation in customer request
 type CreateStructureRequest struct {
-	CustomerID uint    `json:"customer_id" binding:"required"`
-	TempKey    string  `json:"tempKey" example:"1"`
-	ParentKey  *string `json:"parentKey" example:"null"`
-	Name       string  `json:"name" binding:"required" example:"Board of Directors"`
-	Level      int     `json:"level" binding:"required" example:"1"`
-	Address    string  `json:"address" example:"Jakarta"`
-	Active     bool    `json:"active" example:"true"`
+	// CustomerID uint    `json:"customer_id" binding:"required"` // Hapus field ini
+	TempKey   string  `json:"tempKey" example:"1"`
+	ParentKey *string `json:"parentKey" example:"null"`
+	Name      string  `json:"name" binding:"required" example:"Board of Directors"`
+	Level     int     `json:"level" binding:"required" example:"1"`
+	Address   string  `json:"address" example:"Jakarta"`
+	Active    bool    `json:"active" example:"true"`
 }
 
 // CreateGroupsRequest represents groups assignment in customer request
@@ -147,10 +171,10 @@ type CreateGroupsRequest struct {
 
 // CreateOtherRequest represents other attributes in customer request
 type CreateOtherRequest struct {
-	CustomerID uint    `json:"customer_id" binding:"required"`
-	Key        string  `json:"key" binding:"required" example:"company_size"`
-	Value      *string `json:"value" example:"50-100 employees"`
-	Active     bool    `json:"active" example:"true"`
+	// CustomerID uint    `json:"customer_id" binding:"required"` // Hapus field ini
+	Key    string  `json:"key" binding:"required" example:"company_size"`
+	Value  *string `json:"value" example:"50-100 employees"`
+	Active bool    `json:"active" example:"true"`
 }
 
 // CreateActivityRequest represents activity creation request
@@ -212,7 +236,7 @@ type ActivityCheckinRequest struct {
 }
 
 // Invoice DTOs
-type CreateInvoiceRequest struct {
+/* type CreateInvoiceRequest struct {
 	CustomerID    uint      `json:"customer_id" binding:"required"`
 	ProjectID     string    `json:"project_id"`
 	InvoiceNumber string    `json:"invoice_number" binding:"required"`
@@ -220,18 +244,18 @@ type CreateInvoiceRequest struct {
 	IssuedDate    time.Time `json:"issued_date" binding:"required"`
 	DueDate       time.Time `json:"due_date" binding:"required"`
 	PaidAmount    float64   `json:"paid_amount" binding:"gte=0"`
-}
+} */
 
-type UpdateInvoiceRequest struct {
+/* type UpdateInvoiceRequest struct {
 	ProjectID     *string    `json:"project_id"`
 	InvoiceNumber *string    `json:"invoice_number"`
 	Amount        *float64   `json:"amount" binding:"omitempty,gt=0"`
 	IssuedDate    *time.Time `json:"issued_date"`
 	DueDate       *time.Time `json:"due_date"`
 	PaidAmount    *float64   `json:"paid_amount" binding:"omitempty,gte=0"`
-}
+} */
 
-type InvoiceResponse struct {
+/* type InvoiceResponse struct {
 	ID            uint              `json:"id"`
 	CustomerID    uint              `json:"customer_id"`
 	ProjectID     string            `json:"project_id"`
@@ -245,10 +269,10 @@ type InvoiceResponse struct {
 	CreatedAt     time.Time         `json:"created_at"`
 	UpdatedAt     time.Time         `json:"updated_at"`
 	Customer      *CustomerResponse `json:"customer,omitempty"`
-}
+} */
 
 // Payment DTOs
-type CreatePaymentRequest struct {
+/* type CreatePaymentRequest struct {
 	InvoiceID uint      `json:"invoice_id" binding:"required"`
 	Amount    float64   `json:"amount" binding:"required,gt=0"`
 	PaidAt    time.Time `json:"paid_at" binding:"required"`
@@ -257,9 +281,9 @@ type CreatePaymentRequest struct {
 type UpdatePaymentRequest struct {
 	Amount *float64   `json:"amount" binding:"omitempty,gt=0"`
 	PaidAt *time.Time `json:"paid_at"`
-}
+} */
 
-type PaymentResponse struct {
+/* type PaymentResponse struct {
 	ID        uint             `json:"id"`
 	InvoiceID uint             `json:"invoice_id"`
 	Amount    float64          `json:"amount"`
@@ -267,7 +291,7 @@ type PaymentResponse struct {
 	CreatedAt time.Time        `json:"created_at"`
 	UpdatedAt time.Time        `json:"updated_at"`
 	Invoice   *InvoiceResponse `json:"invoice,omitempty"`
-}
+} */
 
 // Status DTOs
 type CreateStatusRequest struct {

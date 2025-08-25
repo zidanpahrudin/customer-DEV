@@ -89,17 +89,24 @@ func CreateCustomer(c *gin.Context) {
 		}
 	}()
 
-	// Create customer
+	// Di dalam fungsi CreateCustomer, tambahkan setelah Logo assignment:
+	// Create customer entity
 	customer := entity.Customer{
 		Name:             req.Name,
 		BrandName:        req.BrandName,
 		Code:             req.Code,
 		AccountManagerId: req.AccountManagerId,
-		Status:           req.StatusName, // Gunakan req.StatusName dari request body
+		Status:           "Active", // Default status
 	}
 
+	// Set logo if provided
 	if req.Logo != nil {
 		customer.Logo = *req.Logo
+	}
+
+	// Set logo_small if provided
+	if req.LogoSmall != nil {
+		customer.LogoSmall = *req.LogoSmall
 	}
 
 	if err := tx.Create(&customer).Error; err != nil {
@@ -214,23 +221,23 @@ func CreateCustomer(c *gin.Context) {
 
 	// Handle groups (industry and parent group)
 	// Note: This assumes groups already exist in the database
-	for _, group := range req.Groups {
-		if group.IndustryID != "" && group.IndustryActive {
-			// Find industry group and associate
-			var industryGroup entity.Group
-			if err := tx.Where("id = ?", group.IndustryID).First(&industryGroup).Error; err == nil {
-				tx.Model(&customer).Association("Groups").Append(&industryGroup)
-			}
-		}
-
-		if group.ParentGroupID != "" && group.ParentGroupActive {
-			// Find parent group and associate
-			var parentGroup entity.Group
-			if err := tx.Where("id = ?", group.ParentGroupID).First(&parentGroup).Error; err == nil {
-				tx.Model(&customer).Association("Groups").Append(&parentGroup)
-			}
+	// Hapus: for _, group := range req.Groups {
+	if req.Groups.IndustryID != "" && req.Groups.IndustryActive {
+		// Find industry group and associate
+		var industryGroup entity.Group
+		if err := tx.Where("id = ?", req.Groups.IndustryID).First(&industryGroup).Error; err == nil {
+			tx.Model(&customer).Association("Groups").Append(&industryGroup)
 		}
 	}
+
+	if req.Groups.ParentGroupID != "" && req.Groups.ParentGroupActive {
+		// Find parent group and associate
+		var parentGroup entity.Group
+		if err := tx.Where("id = ?", req.Groups.ParentGroupID).First(&parentGroup).Error; err == nil {
+			tx.Model(&customer).Association("Groups").Append(&parentGroup)
+		}
+	}
+	// Hapus: }
 
 	// Commit transaction
 	if err := tx.Commit().Error; err != nil {
@@ -242,7 +249,62 @@ func CreateCustomer(c *gin.Context) {
 	var createdCustomer entity.Customer
 	config.DB.Preload("Addresses").Preload("Sosmeds").Preload("Contacts").Preload("Structures").Preload("Groups").Preload("Others").First(&createdCustomer, customer.ID)
 
-	c.JSON(http.StatusCreated, createdCustomer)
+	// Mapping manual untuk response
+	response := dto.CustomerResponse{
+		ID:               createdCustomer.ID,
+		Name:             createdCustomer.Name,
+		BrandName:        createdCustomer.BrandName,
+		Code:             createdCustomer.Code,
+		AccountManagerId: createdCustomer.AccountManagerId,
+		/*  Email:            createdCustomer.Email,
+		    Phone:            createdCustomer.Phone,
+		    Website:          createdCustomer.Website,
+		    Description:      createdCustomer.Description, */
+		Logo:        createdCustomer.Logo,
+		LogoSmall:   createdCustomer.LogoSmall,
+		Status:      createdCustomer.Status,
+		Category:    createdCustomer.Category,
+		Rating:      createdCustomer.Rating,
+		AverageCost: createdCustomer.AverageCost,
+		CreatedAt:   createdCustomer.CreatedAt,
+		UpdatedAt:   createdCustomer.UpdatedAt,
+	}
+
+	// Mapping addresses
+	for _, addr := range createdCustomer.Addresses {
+		response.Addresses = append(response.Addresses, dto.AddressResponse{
+			Name:    addr.Name,
+			Address: addr.Address,
+			IsMain:  addr.Main,
+			Active:  addr.Active,
+		})
+	}
+
+	// Mapping contacts
+	for _, contact := range createdCustomer.Contacts {
+		response.Contacts = append(response.Contacts, dto.ContactResponse{
+			Name:        contact.Name,
+			JobPosition: contact.JobPosition,
+			Email:       contact.Email,
+			Phone:       contact.Phone,
+			Active:      contact.Active,
+		})
+	}
+
+	// Mapping others
+	for _, other := range createdCustomer.Others {
+		var valueStr string
+		if other.Value != nil {
+			valueStr = *other.Value
+		}
+		response.Others = append(response.Others, dto.OtherResponse{
+			Key:    other.Key,
+			Value:  valueStr,
+			Active: other.Active,
+		})
+	}
+
+	c.JSON(http.StatusCreated, response)
 }
 
 // @Summary Get customer by ID

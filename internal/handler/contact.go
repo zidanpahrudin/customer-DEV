@@ -8,7 +8,7 @@ import (
 	"customer-api/internal/entity"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
+	// Hapus import "gorm.io/gorm" karena tidak digunakan
 )
 
 // @Summary Create contact for customer
@@ -43,38 +43,23 @@ func CreateContact(c *gin.Context) {
 		return
 	}
 
-	// Validate customer exists
-	var customer entity.Customer
-	if err := config.DB.First(&customer, req.CustomerID).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Customer not found"})
-		} else {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to validate customer"})
-		}
-		return
-	}
-
-	// Parse birthdate if provided
-	var birthdate *time.Time
-	if req.Birthdate != "" {
-		parsedDate, err := time.Parse("2006-01-02", req.Birthdate)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid birthdate format. Use YYYY-MM-DD"})
-			return
-		}
-		birthdate = &parsedDate
-	}
-
+	// Hapus validasi customer exists karena CustomerID tidak ada di request
 	contact := entity.Contact{
-		CustomerID:  req.CustomerID,
+		// CustomerID: customer.ID, // Akan diset sesuai kebutuhan
 		Name:        req.Name,
-		Birthdate:   birthdate,
 		JobPosition: req.JobPosition,
 		Email:       req.Email,
 		Phone:       req.Phone,
 		Mobile:      req.Mobile,
 		Main:        req.IsMain,
 		Active:      req.Active,
+	}
+
+	// Parse birthdate if provided
+	if req.Birthdate != "" {
+		if birthdate, err := time.Parse("2006-01-02", req.Birthdate); err == nil {
+			contact.Birthdate = &birthdate
+		}
 	}
 
 	result := config.DB.Create(&contact)

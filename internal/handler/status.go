@@ -271,14 +271,14 @@ func GetCustomersByStatus(c *gin.Context) {
 	var customerResponses []dto.CustomerResponse
 	for _, customer := range customers {
 		customerResponses = append(customerResponses, dto.CustomerResponse{
-			ID:          customer.ID,
-			Name:        customer.Name,
-			BrandName:   customer.BrandName,
-			Code:        customer.Code,
-			Email:       customer.Email,
+			ID:        customer.ID,
+			Name:      customer.Name,
+			BrandName: customer.BrandName,
+			Code:      customer.Code,
+			/* 	Email:       customer.Email,
 			Phone:       customer.Phone,
 			Website:     customer.Website,
-			Description: customer.Description,
+			Description: customer.Description, */
 			Status:      customer.Status,
 			Category:    customer.Category,
 			Rating:      customer.Rating,

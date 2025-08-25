@@ -1454,6 +1454,69 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/customers/{id}/logo-small": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Upload a small logo/icon for customer (PNG, SVG, JPG)",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Upload customer logo small",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Customer ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Logo small file (PNG, SVG, JPG)",
+                        "name": "logo_small",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/customers/{id}/others": {
             "get": {
                 "security": [
@@ -3850,7 +3913,6 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "address",
-                "customer_id",
                 "name"
             ],
             "properties": {
@@ -3862,14 +3924,12 @@ const docTemplate = `{
                     "type": "string",
                     "example": "Jl. Sudirman No. 123, Jakarta Selatan"
                 },
-                "customer_id": {
-                    "type": "integer"
-                },
                 "isMain": {
                     "type": "boolean",
                     "example": true
                 },
                 "name": {
+                    "description": "CustomerID uint   ` + "`" + `json:\"customer_id\" binding:\"required\"` + "`" + ` // Hapus field ini",
                     "type": "string",
                     "example": "Head Office"
                 }
@@ -3878,7 +3938,6 @@ const docTemplate = `{
         "dto.CreateContactRequest": {
             "type": "object",
             "required": [
-                "customer_id",
                 "name"
             ],
             "properties": {
@@ -3889,9 +3948,6 @@ const docTemplate = `{
                 "birthdate": {
                     "type": "string",
                     "example": "1985-03-15"
-                },
-                "customer_id": {
-                    "type": "integer"
                 },
                 "email": {
                     "type": "string",
@@ -3910,6 +3966,7 @@ const docTemplate = `{
                     "example": "0812-3456-7890"
                 },
                 "name": {
+                    "description": "CustomerID  uint   ` + "`" + `json:\"customer_id\" binding:\"required\"` + "`" + ` // Hapus field ini",
                     "type": "string",
                     "example": "Budi Santoso"
                 },
@@ -3955,6 +4012,10 @@ const docTemplate = `{
                     }
                 },
                 "logo": {
+                    "type": "string"
+                },
+                "logoSmall": {
+                    "description": "Field baru untuk logo kecil",
                     "type": "string"
                 },
                 "name": {
@@ -4009,7 +4070,6 @@ const docTemplate = `{
         "dto.CreateOtherRequest": {
             "type": "object",
             "required": [
-                "customer_id",
                 "key"
             ],
             "properties": {
@@ -4017,10 +4077,8 @@ const docTemplate = `{
                     "type": "boolean",
                     "example": true
                 },
-                "customer_id": {
-                    "type": "integer"
-                },
                 "key": {
+                    "description": "CustomerID uint    ` + "`" + `json:\"customer_id\" binding:\"required\"` + "`" + ` // Hapus field ini",
                     "type": "string",
                     "example": "company_size"
                 },
@@ -4034,7 +4092,6 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "handle",
-                "name",
                 "platform"
             ],
             "properties": {
@@ -4046,11 +4103,8 @@ const docTemplate = `{
                     "type": "string",
                     "example": "@digiinno_id"
                 },
-                "name": {
-                    "type": "string",
-                    "example": "Instagram"
-                },
                 "platform": {
+                    "description": "Name     string ` + "`" + `json:\"name\" binding:\"required\" example:\"Instagram\"` + "`" + ` // Hapus field ini karena duplikat dengan Platform",
                     "type": "string",
                     "example": "Instagram"
                 }
@@ -4070,7 +4124,6 @@ const docTemplate = `{
         "dto.CreateStructureRequest": {
             "type": "object",
             "required": [
-                "customer_id",
                 "level",
                 "name"
             ],
@@ -4082,9 +4135,6 @@ const docTemplate = `{
                 "address": {
                     "type": "string",
                     "example": "Jakarta"
-                },
-                "customer_id": {
-                    "type": "integer"
                 },
                 "level": {
                     "type": "integer",
@@ -4099,6 +4149,7 @@ const docTemplate = `{
                     "example": "null"
                 },
                 "tempKey": {
+                    "description": "CustomerID uint    ` + "`" + `json:\"customer_id\" binding:\"required\"` + "`" + ` // Hapus field ini",
                     "type": "string",
                     "example": "1"
                 }
@@ -4134,6 +4185,11 @@ const docTemplate = `{
                 "id": {
                     "type": "integer",
                     "example": 1
+                },
+                "logo_small": {
+                    "description": "Field baru untuk logo kecil",
+                    "type": "string",
+                    "example": "uploads/logos_small/logo_small_1.png"
                 },
                 "name": {
                     "type": "string",
@@ -4187,6 +4243,11 @@ const docTemplate = `{
                 "id": {
                     "type": "integer",
                     "example": 1
+                },
+                "logo_small": {
+                    "description": "Field baru untuk logo kecil",
+                    "type": "string",
+                    "example": "uploads/logos_small/logo_small_1.png"
                 },
                 "name": {
                     "type": "string",
@@ -4618,6 +4679,10 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "logo": {
+                    "type": "string"
+                },
+                "logo_small": {
+                    "description": "Field baru untuk logo kecil",
                     "type": "string"
                 },
                 "name": {
