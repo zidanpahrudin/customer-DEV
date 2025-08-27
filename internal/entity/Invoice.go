@@ -9,7 +9,7 @@ import (
 
 // Invoice model - tabel untuk invoice
 type Invoice struct {
-	ID            uint           `json:"id" gorm:"primaryKey"`
+	ID            string         `json:"id" gorm:"type:char(26);primary_key"`
 	CustomerID    uint           `json:"customer_id" gorm:"not null"`
 	ProjectID     string         `json:"project_id"`
 	InvoiceNumber string         `json:"invoice_number" gorm:"unique;not null"`
@@ -24,4 +24,11 @@ type Invoice struct {
 	// Relations
 	Customer Customer  `json:"customer,omitempty" gorm:"foreignKey:CustomerID"`
 	Payments []Payment `json:"payments,omitempty" gorm:"foreignKey:InvoiceID"` // Tambahkan ini
+}
+
+
+func (s *Invoice) BeforeCreate(tx *gorm.DB) (err error) {
+    entropy := ulid.Monotonic(rand.New(rand.NewSource(time.Now().UnixNano())), 0)
+    s.ID = ulid.MustNew(ulid.Timestamp(time.Now()), entropy).String()
+    return
 }

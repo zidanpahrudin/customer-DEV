@@ -10,8 +10,8 @@ import (
 // Sosmed model - update untuk menambahkan field handle dan active
 // Sosmed model
 type Sosmed struct {
-	ID         uint           `json:"id" gorm:"primaryKey"`
-	CustomerID uint           `json:"customer_id" gorm:"not null"`
+	ID            string         `json:"id" gorm:"type:char(26);primary_key"`
+	CustomerID string           `json:"customer_id" gorm:"not null"`
 	Name       string         `json:"name" gorm:"not null"`
 	Platform   string         `json:"platform" gorm:"not null"`
 	Handle     string         `json:"handle" gorm:"not null"`
@@ -25,4 +25,12 @@ type Sosmed struct {
 
 	// Relations - hilangkan dari JSON response
 	Customer Customer `json:"-" gorm:"foreignKey:CustomerID"`
+}
+
+
+
+func (s *Sosmed) BeforeCreate(tx *gorm.DB) (err error) {
+    entropy := ulid.Monotonic(rand.New(rand.NewSource(time.Now().UnixNano())), 0)
+    s.ID = ulid.MustNew(ulid.Timestamp(time.Now()), entropy).String()
+    return
 }

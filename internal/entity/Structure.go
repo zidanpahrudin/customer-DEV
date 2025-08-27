@@ -9,11 +9,11 @@ import (
 
 // Structure model - update untuk menambahkan field address dan active
 type Structure struct {
-	ID         uint           `json:"id" gorm:"primaryKey"`
-	CustomerID uint           `json:"customer_id" gorm:"not null"`
+	ID        string         `json:"id" gorm:"primaryKey;size:26"`
+	CustomerID string           `json:"customer_id" gorm:"not null"`
 	Name       string         `json:"name" gorm:"not null"`
 	Level      int            `json:"level" gorm:"not null"`
-	ParentID   *uint          `json:"parent_id"`
+	ParentID   *string               `json:"parent_id"`
 	Address    string         `json:"address"`
 	Position   int            `json:"position" gorm:"default:0"`
 	Active     bool           `json:"active" gorm:"default:true"`
@@ -25,4 +25,10 @@ type Structure struct {
 	Customer Customer    `json:"-" gorm:"foreignKey:CustomerID"`
 	Parent   *Structure  `json:"parent,omitempty" gorm:"foreignKey:ParentID"`
 	Children []Structure `json:"children,omitempty" gorm:"foreignKey:ParentID"`
+}
+
+func (sd *Structure) BeforeCreate(tx *gorm.DB) (err error) {
+	entropy := ulid.Monotonic(rand.New(rand.NewSource(time.Now().UnixNano())), 0)
+	sd.ID = ulid.MustNew(ulid.Timestamp(time.Now()), entropy).String()
+	return
 }

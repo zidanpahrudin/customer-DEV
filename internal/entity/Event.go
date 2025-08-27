@@ -2,13 +2,13 @@ package entity
 
 import (
 	"time"
-	"math/rand"
+	"crypto/rand"
 	"github.com/oklog/ulid/v2"
 	"gorm.io/gorm"
 )
 
 type Event struct {
-	ID          uint           `json:"id" gorm:"primaryKey"`
+	ID		string         		`json:"id" gorm:"primaryKey;size:26"`
 	ActivityTypeId  uint       `json:"activity_type_id" gorm:"not null"`
 	ScheduledAt    time.Time  `json:"scheduled_at" gorm:"not null"`
 	ScheduledTime time.Time  `json:"scheduled_time" gorm:"not null"`
@@ -31,9 +31,12 @@ type Event struct {
 }
 
 // auto generate id
-func (e *Event) BeforeCreate(tx *gorm.DB) (err error) {
-    if e.ID == 0 {
-        e.ID = uint(time.Now().Unix()) // pakai detik, aman untuk BIGINT
-    }
-    return nil
+// before create hook
+func (c *Event) BeforeCreate(tx *gorm.DB) error {
+	id, err := ulid.New(ulid.Timestamp(time.Now()), rand.Reader)
+	if err != nil {
+		return err
+	}
+	c.ID = id.String()
+	return nil
 }

@@ -2,14 +2,14 @@ package entity
 
 import (
 	"time"
-	"crypto/rand"
+	"math/rand"
 	"github.com/oklog/ulid/v2"
 	"gorm.io/gorm"
 )
 
 // Customer model - update untuk menambahkan field baru
 // Customer model - update untuk menambahkan field baru
-type Customer struct {
+type HistoryCustomer struct {
 	ID		string         		`json:"id" gorm:"primaryKey;size:26"`
 	Name             string         `json:"name" gorm:"not null"`
 	BrandName        string         `json:"brand_name"`
@@ -24,7 +24,6 @@ type Customer struct {
 	Category         string         `json:"category"`
 	Rating           float64        `json:"rating" gorm:"default:0"`
 	AverageCost      float64        `json:"average_cost" gorm:"default:0"`
-	LogoSmall 		 string         `json:"logo_small"`
 	CreatedAt        time.Time      `json:"created_at"`
 	UpdatedAt        time.Time      `json:"updated_at"`
 	DeletedAt        gorm.DeletedAt `json:"-" gorm:"index"`
@@ -41,11 +40,9 @@ type Customer struct {
 }
 
 // BeforeCreate hook - generate ID before create
-func (c *Customer) BeforeCreate(tx *gorm.DB) error {
-	id, err := ulid.New(ulid.Timestamp(time.Now()), rand.Reader)
-	if err != nil {
-		return err
-	}
-	c.ID = id.String()
-	return nil
+// before save generate id
+func (s *HistoryCustomer) BeforeCreate(tx *gorm.DB) (err error) {
+    entropy := ulid.Monotonic(rand.New(rand.NewSource(time.Now().UnixNano())), 0)
+    s.ID = ulid.MustNew(ulid.Timestamp(time.Now()), entropy).String()
+    return
 }

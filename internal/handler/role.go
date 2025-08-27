@@ -160,8 +160,8 @@ func DeleteRole(c *gin.Context) {
 func SetupDefaultRoles(c *gin.Context) {
 	// Create default roles if they don't exist
 	defaultRoles := []entity.Role{
-		{ID: 1, RoleName: "admin"},
-		{ID: 2, RoleName: "user"},
+		{ID: "1", RoleName: "admin"},
+		{ID: "2", RoleName: "user"},
 	}
 
 	for _, role := range defaultRoles {

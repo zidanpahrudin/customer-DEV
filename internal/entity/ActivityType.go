@@ -9,14 +9,14 @@ import (
 
 
 type ActivityType struct {
-	ID   uint   `json:"id" gorm:"primaryKey"`
+	ID   string `json:"id" gorm:"type:char(36);primary_key"`
 	Name string `json:"name" gorm:"not null"`
 }
 
 // before saving, ensure ID is set
-func (a *ActivityType) BeforeCreate(tx *gorm.DB) (err error) {
-	if a.ID == 0 {
-		a.ID = uint(time.Now().UnixNano()) // use nanoseconds for uniqueness
-	}
-	return
+// before save generate id
+func (s *ActivityType) BeforeCreate(tx *gorm.DB) (err error) {
+    entropy := ulid.Monotonic(rand.New(rand.NewSource(time.Now().UnixNano())), 0)
+    s.ID = ulid.MustNew(ulid.Timestamp(time.Now()), entropy).String()
+    return
 }

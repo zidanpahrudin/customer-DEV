@@ -201,8 +201,8 @@ func UpdateActivityType(c *gin.Context) {
 // @Failure 500 {object} dto.ErrorResponse
 // @Router /api/activity-types/{id} [delete]
 func DeleteActivityType(c *gin.Context) {
-	idInt, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
+	id := c.Param("id")
+	if  id == "" {
 		c.JSON(http.StatusBadRequest, dto.Response{
 			Status:  http.StatusBadRequest,
 			Message: "Invalid ID",
@@ -211,7 +211,6 @@ func DeleteActivityType(c *gin.Context) {
 		return
 	}
 
-	id := uint(idInt) // <-- konversi int ke uint
 
 	db := config.DB
 	if result := db.Delete(&entity.ActivityType{ID: id}); result.Error != nil {

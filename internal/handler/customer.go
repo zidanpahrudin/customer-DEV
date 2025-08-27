@@ -11,6 +11,11 @@ import (
 	"fmt"
 	"gorm.io/gorm"
 	"github.com/gin-gonic/gin"
+	"github.com/jung-kurt/gofpdf"
+	"github.com/xuri/excelize/v2"
+	"bytes"
+	// "strconv"
+	
 )
 
 // @Summary Get all customers
@@ -81,6 +86,8 @@ func CreateCustomer(c *gin.Context) {
 		return
 	}
 
+	
+
 	// Start transaction
 	tx := config.DB.Begin()
 	defer func() {
@@ -92,21 +99,21 @@ func CreateCustomer(c *gin.Context) {
 	// Di dalam fungsi CreateCustomer, tambahkan setelah Logo assignment:
 	// Create customer entity
 	customer := entity.Customer{
-		Name:             req.Name,
-		BrandName:        req.BrandName,
-		Code:             req.Code,
-		AccountManagerId: req.AccountManagerId,
+		Name:             *req.Name,
+		BrandName:        *req.BrandName,
+		Code:             *req.Code,
+		AccountManagerId: *req.AccountManagerId,
 		Status:           "Active", // Default status
 	}
 
 	// Set logo if provided
-	if req.Logo != nil {
-		customer.Logo = *req.Logo
+	if req.Logo != "" {
+		customer.Logo = req.Logo
 	}
 
 	// Set logo_small if provided
-	if req.LogoSmall != nil {
-		customer.LogoSmall = *req.LogoSmall
+	if req.LogoSmall != "" {
+		customer.LogoSmall = req.LogoSmall
 	}
 
 	if err := tx.Create(&customer).Error; err != nil {
@@ -177,7 +184,7 @@ func CreateCustomer(c *gin.Context) {
 	}
 
 	// Create structures with hierarchy
-	tempKeyMap := make(map[string]uint)
+	tempKeyMap := make(map[string]string)
 	for _, structReq := range req.Structures {
 		structure := entity.Structure{
 			CustomerID: customer.ID,
@@ -626,4 +633,122 @@ func GetCustomerStats(c *gin.Context) {
 		},
 	})
 }
+
+
+// ExportCustomers handles customer export to Excel or PDF
+func ExportCustomers(c *gin.Context) {
+	exportType := c.Query("type")
+
+	// validasi export type
+	if exportType != "excel" && exportType != "pdf" {
+		sendError(c, http.StatusBadRequest, "Invalid export type (must be 'excel' or 'pdf')")
+		return
+	}
+
+	// ambil data customer
+	var customers []entity.Customer
+	if err := config.DB.Find(&customers).Error; err != nil {
+		sendError(c, http.StatusInternalServerError, "Failed to fetch customers")
+		return
+	}
+
+	switch exportType {
+	case "excel":
+		file, err := createExcelFile(customers)
+		if err != nil {
+			sendError(c, http.StatusInternalServerError, "Failed to create excel file: "+err.Error())
+			return
+		}
+		sendFile(c, file, "customers.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
+	case "pdf":
+		file, err := createPDFFile(customers)
+		if err != nil {
+			sendError(c, http.StatusInternalServerError, "Failed to create pdf file: "+err.Error())
+			return
+		}
+		sendFile(c, file, "customers.pdf", "application/pdf")
+	}
+}
+
+// helper untuk buat Excel file
+func createExcelFile(customers []entity.Customer) ([]byte, error) {
+	f := excelize.NewFile()
+	sheet := "Customers"
+	f.NewSheet(sheet)
+
+	// header
+	headers := []string{"ID", "Name", "Brand Name", "Code", "Status"}
+	for i, h := range headers {
+		cell, _ := excelize.CoordinatesToCellName(i+1, 1)
+		f.SetCellValue(sheet, cell, h)
+	}
+
+	// data
+	for row, cust := range customers {
+		values := []interface{}{cust.ID, cust.Name, cust.BrandName, cust.Code, cust.Status}
+		for col, val := range values {
+			cell, _ := excelize.CoordinatesToCellName(col+1, row+2)
+			f.SetCellValue(sheet, cell, val)
+		}
+	}
+
+	var buf bytes.Buffer
+	if err := f.Write(&buf); err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
+}
+
+// helper untuk buat PDF file
+func createPDFFile(customers []entity.Customer) ([]byte, error) {
+	pdf := gofpdf.New("P", "mm", "A4", "")
+	pdf.AddPage()
+	pdf.SetFont("Arial", "B", 12)
+
+	// header
+	headers := []string{"ID", "Name", "Brand Name", "Code", "Status"}
+	for _, h := range headers {
+		pdf.CellFormat(40, 10, h, "1", 0, "C", false, 0, "")
+	}
+	pdf.Ln(-1)
+
+	// data
+	pdf.SetFont("Arial", "", 10)
+	for _, cust := range customers {
+		pdf.CellFormat(40, 10, cust.ID, "1", 0, "", false, 0, "")
+		pdf.CellFormat(40, 10, cust.Name, "1", 0, "", false, 0, "")
+		pdf.CellFormat(40, 10, cust.BrandName, "1", 0, "", false, 0, "")
+		pdf.CellFormat(40, 10, cust.Code, "1", 0, "", false, 0, "")
+		pdf.CellFormat(40, 10, cust.Status, "1", 0, "", false, 0, "")
+		pdf.Ln(-1)
+	}
+
+	var buf bytes.Buffer
+	err := pdf.Output(&buf)
+	if err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
+}
+
+// helper untuk kirim response error
+func sendError(c *gin.Context, code int, message string) {
+	c.JSON(code, gin.H{
+		"status":  "failed",
+		"message": message,
+		"data":    nil,
+	})
+}
+
+// helper untuk kirim file
+func sendFile(c *gin.Context, data []byte, filename, contentType string) {
+	c.Header("Content-Type", contentType)
+	c.Header("Content-Disposition", "attachment; filename="+filename)
+	c.Header("Content-Transfer-Encoding", "binary")
+	c.Header("Cache-Control", "no-cache")
+	c.Header("Expires", "0")
+	c.Writer.Write(data)
+}
+
 
