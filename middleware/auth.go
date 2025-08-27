@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"os"
 	"strings"
-
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -43,6 +42,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		userID, ok := claims["user_id"]
+
 		if !ok {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user ID in token"})
 			c.Abort()

@@ -55,7 +55,7 @@ func GetCustomers(c *gin.Context) {
 	config.DB.Model(&entity.Customer{}).Select("COALESCE(AVG(average_cost), 0)").Row().Scan(&avgCost)
 
 	var blockedCustomers int64
-	config.DB.Model(&entity.Customer{}).Where("status = ?", "Blocked").Count(&blockedCustomers)
+	config.DB.Model(&entity.Customer{}).Where("status = ?", "blocked").Count(&blockedCustomers)
 
 	c.JSON(http.StatusOK, gin.H{
 		"customers": customers,
@@ -429,16 +429,16 @@ func UploadCustomerLogo(c *gin.Context) {
 // @Router /api/customers/status/{id} [post]
 func UpdateCustomerStatus(c *gin.Context) {
 
-	// Ambil user_id dari context
-	userID, exists := c.Get("user_id")
+	userIDInterface, exists := c.Get("user_id")
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found in context"})
 		return
 	}
 
-	uid, ok := userID.(uint)
+	// Type assertion ke string
+	userID, ok := userIDInterface.(string)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user ID in token"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID in context has invalid type"})
 		return
 	}
 
@@ -455,10 +455,11 @@ func UpdateCustomerStatus(c *gin.Context) {
 
 	// Cari customer
 	var customer entity.Customer
-	if err := config.DB.First(&customer, id).Error; err != nil {
+	if err := config.DB.Where("id = ?", id).First(&customer).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Customer not found"})
 		return
 	}
+
 
 	// update status customer
 	customer.Status = status
@@ -486,7 +487,7 @@ func UpdateCustomerStatus(c *gin.Context) {
 		// Simpan record document
 		document = entity.Document{
 			CustomerID: customer.ID,
-			UserID:		uid,
+			UserID:		userID,
 			Notes:      notes,
 			Type:       "StatusChange",
 			URLFile:    filePath,

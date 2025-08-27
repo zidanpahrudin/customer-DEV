@@ -14,7 +14,7 @@ type Document struct {
 	Notes       string         `json:"notes" gorm:"not null"`
 	Type       string         `json:"type" gorm:"not null"`
 	URLFile        string         `json:"url_file" gorm:"not null"`
-	UserID     uint           `json:"user_id" gorm:"not null"`
+	UserID     string           `json:"user_id" gorm:"not null"`
 	IsActive   bool           `json:"is_active" gorm:"default:true"`
 	CreatedAt  time.Time      `json:"created_at"`
 	UpdatedAt  time.Time      `json:"updated_at"`
