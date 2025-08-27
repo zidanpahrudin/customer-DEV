@@ -5,6 +5,8 @@ import (
 	"os"
 	"time"
 
+	"strconv"
+	"fmt"
 	"customer-api/internal/config"
 	"customer-api/internal/entity"
 
@@ -58,6 +60,27 @@ func Login(c *gin.Context) {
 	} else {
 		usernameOrEmail = input.Email
 	}
+
+	
+		// Always convert to string
+		var uid string
+		switch v := userID.(type) {
+		case float64: // common case when ID was numeric
+			uid = fmt.Sprintf("%.0f", v)
+		case int:
+			uid = strconv.Itoa(v)
+		case int64:
+			uid = strconv.FormatInt(v, 10)
+		case uint:
+			uid = strconv.FormatUint(uint64(v), 10)
+		case string: // already string
+			uid = v
+		default:
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user ID type"})
+			c.Abort()
+			return
+		}
+
 
 	// Cek apakah username/email terdaftar
 	result := config.DB.Where("username = ? OR email = ?", usernameOrEmail, usernameOrEmail).First(&user)

@@ -448,7 +448,7 @@ func UpdateCustomerStatus(c *gin.Context) {
 	notes := c.PostForm("notes")     // catatan untuk dokumen
 
 	// Validasi status
-	if status != "active" && status != "blocked" {
+	if status != "active" && status != "blocked" && status != "draft" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid status"})
 		return
 	}
@@ -459,6 +459,10 @@ func UpdateCustomerStatus(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Customer not found"})
 		return
 	}
+
+	// update status customer
+	customer.Status = status
+	config.DB.Save(&customer)
 
 	// Simpan reason ke StatusReasons
 	statusReason := entity.StatusReasons{
