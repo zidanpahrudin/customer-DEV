@@ -2,6 +2,9 @@ package entity
 
 import (
 	"time"
+	"math/rand"
+	"github.com/oklog/ulid/v2"
+	"gorm.io/gorm"
 )
 
 // ActivityAttendee model - tabel pivot untuk attendees aktivitas (many-to-many)

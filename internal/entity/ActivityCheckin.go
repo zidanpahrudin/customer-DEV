@@ -2,13 +2,13 @@ package entity
 
 import (
 	"time"
-
+	"math/rand"
+	"github.com/oklog/ulid/v2"
 	"gorm.io/gorm"
 )
-
 // ActivityCheckin model - tabel untuk check-in aktivitas
 type ActivityCheckin struct {
-	ID          uint           `json:"id" gorm:"primaryKey"`
+	ID		string         		`json:"id" gorm:"primaryKey;size:26"`
 	ActivityID  uint           `json:"activity_id" gorm:"not null"`
 	UserID      uint           `json:"user_id" gorm:"not null"`
 	CheckedInAt time.Time      `json:"checked_in_at" gorm:"not null"`

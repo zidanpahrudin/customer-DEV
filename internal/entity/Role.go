@@ -2,7 +2,8 @@ package entity
 
 import (
 	"time"
-
+	"math/rand"
+	"github.com/oklog/ulid/v2"
 	"gorm.io/gorm"
 )
 

@@ -31,5 +31,5 @@ func main() {
 	// Static files
 	r.Static("/uploads", "./uploads")
 
-	r.Run(":9000")
+	r.Run(":8080")
 }

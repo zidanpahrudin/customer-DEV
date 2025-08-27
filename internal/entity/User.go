@@ -2,9 +2,12 @@ package entity
 
 import (
 	"time"
-
+	"math/rand"
+	"github.com/oklog/ulid/v2"
 	"gorm.io/gorm"
 )
+
+
 // User model for authentication
 type User struct {
 	ID        uint           `json:"id" gorm:"primaryKey"`

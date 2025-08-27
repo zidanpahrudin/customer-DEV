@@ -2,8 +2,10 @@ package entity
 
 import (
 	"time"
+	"math/rand"
+	"github.com/oklog/ulid/v2"
+	"gorm.io/gorm"
 )
-
 // EventAttendee model - tabel pivot untuk attendees event (many-to-many)
 type EventAttendee struct {
 	EventID uint      `json:"event_id" gorm:"primaryKey;not null"`

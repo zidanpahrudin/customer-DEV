@@ -2,9 +2,12 @@ package entity
 
 import (
 	"time"
-
+	"math/rand"
+	"github.com/oklog/ulid/v2"
 	"gorm.io/gorm"
 )
+
+
 // Contact model - update untuk menambahkan field baru
 type Contact struct {
 	ID          uint           `json:"id" gorm:"primaryKey"`

@@ -2,9 +2,11 @@ package entity
 
 import (
 	"time"
-
+	"math/rand"
+	"github.com/oklog/ulid/v2"
 	"gorm.io/gorm"
 )
+
 // Address model - update untuk menambahkan field name dan active
 // Address model
 type Address struct {

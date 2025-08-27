@@ -2,9 +2,12 @@ package entity
 
 import (
 	"time"
-
+	"math/rand"
+	"github.com/oklog/ulid/v2"
 	"gorm.io/gorm"
 )
+
+
 type ActivityType struct {
 	ID   uint   `json:"id" gorm:"primaryKey"`
 	Name string `json:"name" gorm:"not null"`
