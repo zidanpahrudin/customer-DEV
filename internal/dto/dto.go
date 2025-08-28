@@ -340,9 +340,16 @@ type StatusResponse struct {
 	UpdatedAt  time.Time `json:"updated_at"`
 }
 
+type Assessment struct {
+	Name       string         `json:"name"`
+	RoleID	string         `json:"role_id"`
+}
+
 
 type Response struct {
 	Status  int         `json:"status"`
 	Message string      `json:"message"`
 	Data    interface{} `json:"data"`
 }
+
+
