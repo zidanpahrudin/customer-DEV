@@ -857,4 +857,11 @@ func sendFile(c *gin.Context, data []byte, filename, contentType string) {
 	c.Writer.Write(data)
 }
 
-
+// get historyCustomer by UserID
+func getHistoryCustomerByUserID(userID string) ([]entity.HistoryCustomer, error) {
+	var history []entity.HistoryCustomer
+	if err := config.DB.Where("user_id = ?", userID).Find(&history).Error; err != nil {
+		return nil, err
+	}
+	return history, nil
+}

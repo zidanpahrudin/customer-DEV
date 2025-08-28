@@ -16,6 +16,9 @@ func RegisterCustomerRoutes(r *gin.RouterGroup) {
 	// export data
 	r.GET("/customers/export", handler.ExportCustomers)
 
+	// history customer
+	r.GET("/customers/:id/history", handler.getHistoryCustomerByUserID)
+
 
 	r.GET("/customers/:id", handler.GetCustomer)
 	r.GET("/customers/:id/with-addresses", handler.GetCustomerWithAddresses)
