@@ -50,7 +50,7 @@ func ConnectDatabase() {
 	// Drop tabel dengan foreign key terlebih dahulu
 	if !isProd {
     tables := []interface{}{
-        &entity.Activity{},
+       
 		&entity.ActivityAttendee{},
 		&entity.ActivityCheckin{},
 		&entity.ActivityType{},
@@ -58,6 +58,7 @@ func ConnectDatabase() {
 		&entity.Contact{},
 		&entity.Customer{},
 		&entity.Document{},
+		&entity.HistoryCustomer{},
 		&entity.Event{},
 		&entity.EventAttendee{},
 		&entity.Group{},
@@ -77,6 +78,8 @@ func ConnectDatabase() {
 		&entity.WorkflowsDetail{},
 		&entity.GroupConfig{},
 		&entity.GroupConfigDetail{},
+		 &entity.Activity{},
+		
 		
     }
     for _, t := range tables {
@@ -87,7 +90,7 @@ func ConnectDatabase() {
 
 	// Auto migrate the schema - akan membuat tabel sesuai model Go
 	err = DB.AutoMigrate(
-		&entity.Activity{},
+		
 		&entity.ActivityAttendee{},
 		&entity.ActivityCheckin{},
 		&entity.ActivityType{},
@@ -95,6 +98,7 @@ func ConnectDatabase() {
 		&entity.Contact{},
 		&entity.Customer{},
 		&entity.Document{},
+		&entity.HistoryCustomer{},
 		&entity.Event{},
 		&entity.EventAttendee{},
 		&entity.Group{},
@@ -114,6 +118,7 @@ func ConnectDatabase() {
 		&entity.WorkflowsDetail{},
 		&entity.GroupConfig{},
 		&entity.GroupConfigDetail{},
+		&entity.Activity{},
 		
 	)
 	if err != nil {

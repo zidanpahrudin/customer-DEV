@@ -86,7 +86,18 @@ func CreateCustomer(c *gin.Context) {
 		return
 	}
 
-	
+	userIDInterface, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found in context"})
+		return
+	}
+
+	// Type assertion ke string
+	userID, ok := userIDInterface.(string)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID in context has invalid type"})
+		return
+	}
 
 	// Start transaction
 	tx := config.DB.Begin()
@@ -105,6 +116,7 @@ func CreateCustomer(c *gin.Context) {
 		AccountManagerId: *req.AccountManagerId,
 		Status:           "Active", // Default status
 	}
+	
 
 	// Set logo if provided
 	if req.Logo != "" {
@@ -311,6 +323,17 @@ func CreateCustomer(c *gin.Context) {
 		})
 	}
 
+	// Insert HistoryCustomer
+	history := entity.HistoryCustomer{
+		CustomerID: customer.ID,
+		UserID:     userID,
+		Status:     "Created",
+		Notes:     "Created new customer",
+	}
+	config.DB.Create(&history)
+
+
+
 	c.JSON(http.StatusCreated, response)
 }
 
@@ -340,7 +363,20 @@ func GetCustomer(c *gin.Context) {
 
 func UpdateCustomer(c *gin.Context) {
 	id := c.Param("id")
+	userIDInterface, exists := c.Get("user_id")
 
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found in context"})
+		return
+	}
+
+	// Type assertion ke string
+	userID, ok := userIDInterface.(string)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID in context has invalid type"})
+		return
+	}
+	
 	var customer entity.Customer
 	result := config.DB.First(&customer, id)
 	if result.Error != nil {
@@ -354,11 +390,35 @@ func UpdateCustomer(c *gin.Context) {
 	}
 
 	config.DB.Save(&customer)
+
+	// Insert HistoryCustomer
+	history := entity.HistoryCustomer{
+		CustomerID: customer.ID,
+		UserID:     userID,
+		Status:     "Updated",
+		Notes:     "Updated customer",
+	}
+	config.DB.Create(&history)
+
 	c.JSON(http.StatusOK, customer)
 }
 
 func DeleteCustomer(c *gin.Context) {
 	id := c.Param("id")
+
+	userIDInterface, exists := c.Get("user_id")
+
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found in context"})
+		return
+	}
+
+	// Type assertion ke string
+	userID, ok := userIDInterface.(string)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID in context has invalid type"})
+		return
+	}
 
 	result := config.DB.Delete(&entity.Customer{}, id)
 	if result.Error != nil {
@@ -366,12 +426,35 @@ func DeleteCustomer(c *gin.Context) {
 		return
 	}
 
+	// Insert HistoryCustomer
+	history := entity.HistoryCustomer{
+		CustomerID: id,
+		UserID:     userID,
+		Status:     "Deleted",
+		Notes:     "Deleted customer",
+	}
+
+	config.DB.Create(&history)
+
 	c.JSON(http.StatusOK, gin.H{"message": "Customer deleted successfully"})
 }
 
 func UploadCustomerLogo(c *gin.Context) {
 	id := c.Param("id")
 
+	userIDInterface, exists := c.Get("user_id")
+
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found in context"})
+		return
+	}
+
+	// Type assertion ke string
+	userID, ok := userIDInterface.(string)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID in context has invalid type"})
+		return
+	}
 	// Check if customer exists
 	var customer entity.Customer
 	result := config.DB.First(&customer, id)
@@ -407,6 +490,15 @@ func UploadCustomerLogo(c *gin.Context) {
 	// Update customer logo path
 	customer.Logo = logoPath
 	config.DB.Save(&customer)
+
+	// Insert HistoryCustomer
+	history := entity.HistoryCustomer{
+		CustomerID: customer.ID,
+		UserID:     userID,
+		Status:     "Logo Uploaded",
+		Notes:     "Uploaded logo for customer",
+	}
+	config.DB.Create(&history)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message":   "Logo uploaded successfully",
@@ -494,6 +586,15 @@ func UpdateCustomerStatus(c *gin.Context) {
 		}
 		config.DB.Create(&document)
 	}
+
+	// Insert HistoryCustomer
+	history := entity.HistoryCustomer{
+		CustomerID: customer.ID,
+		UserID:     userID,
+		Status:     "Status Changed",
+		Notes:     "Changed status to " + status,
+	}
+	config.DB.Create(&history)
 
 	// Response
 	c.JSON(http.StatusOK, gin.H{
