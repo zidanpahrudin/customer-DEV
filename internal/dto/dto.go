@@ -58,7 +58,7 @@ type User struct {
 	ID       uint   `json:"id" example:"1"`
 	Username string `json:"username" example:"user123"`
 	Email    string `json:"email" example:"user@example.com"`
-	RoleID   string   `json:"role_id" example:"1"`
+	RoleID   string `json:"role_id" example:"1"`
 }
 
 // Customer represents customer data
@@ -81,7 +81,7 @@ type Customer struct {
 
 // CustomerResponse represents customer with simplified relations
 type CustomerResponse struct {
-	ID               string   `json:"id" example:"1"`
+	ID               string `json:"id" example:"1"`
 	Name             string `json:"name" example:"PT Teknologi Maju"`
 	BrandName        string `json:"brand_name" example:"TechMaju"`
 	Code             string `json:"code" example:"TM001"`
@@ -104,44 +104,42 @@ type CustomerResponse struct {
 }
 
 type AddressResponse struct {
-	ID        uint   `json:"id" example:"1"`
-	Name      string `json:"name" example:"Head Office"`
-	Address   string `json:"address" example:"Jl. Sudirman No. 123, Jakarta Selatan"`
-	IsMain    bool   `json:"isMain" example:"true"`
-	Active    bool   `json:"active" example:"true"`
+	ID      uint   `json:"id" example:"1"`
+	Name    string `json:"name" example:"Head Office"`
+	Address string `json:"address" example:"Jl. Sudirman No. 123, Jakarta Selatan"`
+	IsMain  bool   `json:"isMain" example:"true"`
+	Active  bool   `json:"active" example:"true"`
 }
 
 type ContactResponse struct {
-	ID           uint   `json:"id" example:"1"`
-	Name         string `json:"name" example:"Budi Santoso"`
-	Birthdate    string `json:"birthdate" example:"1985-03-15"`
-	JobPosition  string `json:"jobPosition" example:"CEO"`
-	Email        string `json:"email" example:"budi@digiinno.com"`
-	Phone        string `json:"phone" example:"021-5551234"`
-	Mobile       string `json:"mobile" example:"0812-3456-7890"`
-	IsMain       bool   `json:"isMain" example:"true"`
-	Active       bool   `json:"active" example:"true"`
+	ID          uint   `json:"id" example:"1"`
+	Name        string `json:"name" example:"Budi Santoso"`
+	Birthdate   string `json:"birthdate" example:"1985-03-15"`
+	JobPosition string `json:"jobPosition" example:"CEO"`
+	Email       string `json:"email" example:"budi@digiinno.com"`
+	Phone       string `json:"phone" example:"021-5551234"`
+	Mobile      string `json:"mobile" example:"0812-3456-7890"`
+	IsMain      bool   `json:"isMain" example:"true"`
+	Active      bool   `json:"active" example:"true"`
 }
 
 type OtherResponse struct {
-	ID    uint   `json:"id" example:"1"`
-	Key   string `json:"key" example:"company_size"`
-	Value string `json:"value" example:"50-100 employees"`
+	ID     uint   `json:"id" example:"1"`
+	Key    string `json:"key" example:"company_size"`
+	Value  string `json:"value" example:"50-100 employees"`
 	Active bool   `json:"active" example:"true"`
 }
 
-
-
 // CreateCustomerRequest represents comprehensive customer creation request
 type CreateCustomerRequest struct {
-	ID 				string                     `json:"id"`
-	ParentID  string        `json:"parent_id"`   // <- UBAH dari *uint ke *string
-	Name             *string                   `json:"name" binding:"required"`
-	BrandName        *string                   `json:"brandName"`
-	Code             *string                   `json:"code"`
-	AccountManagerId *string                   `json:"accountManagerId"`
-	Logo             string                  `json:"logo"`
-	LogoSmall        string                  `json:"logoSmall"`
+	ID               string                   `json:"id"`
+	ParentID         string                   `json:"parent_id"` // <- UBAH dari *uint ke *string
+	Name             *string                  `json:"name" binding:"required"`
+	BrandName        *string                  `json:"brandName"`
+	Code             *string                  `json:"code"`
+	AccountManagerId *string                  `json:"accountManagerId"`
+	Logo             string                   `json:"logo"`
+	LogoSmall        string                   `json:"logoSmall"`
 	StatusName       string                   `json:"status_name"`
 	Addresses        []CreateAddressRequest   `json:"addresses,omitempty"`
 	Socials          []CreateSocialRequest    `json:"socials,omitempty"`
@@ -234,7 +232,7 @@ type UpdateActivityRequest struct {
 
 // ActivityResponse represents activity response
 type ActivityResponse struct {
-	ID   string `json:"id"`
+	ID           string `json:"id"`
 	CustomerID   uint   `json:"customer_id" example:"1"`
 	Title        string `json:"title" example:"Client Meeting"`
 	Type         string `json:"type" example:"Meeting"`
@@ -334,17 +332,16 @@ type UpdateStatusRequest struct {
 }
 
 type StatusResponse struct {
-	ID         string      `json:"id"`
+	ID         string    `json:"id"`
 	StatusName string    `json:"status_name"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
 }
 
 type Assessment struct {
-	Name       string         `json:"name"`
-	RoleID	string         `json:"role_id"`
+	Name   string `json:"name"`
+	RoleID string `json:"role_id"`
 }
-
 
 type Response struct {
 	Status  int         `json:"status"`
@@ -352,4 +349,7 @@ type Response struct {
 	Data    interface{} `json:"data"`
 }
 
-
+type AssessmentDetail struct {
+	Name     string `json:"name"`
+	IsActive bool   `json:"is_active"`
+}

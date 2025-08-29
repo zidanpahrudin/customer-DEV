@@ -36,5 +36,7 @@ func RegisterRoutes(r *gin.Engine) {
 	route.RegisterStagesRoutes(protected)
 	route.RegisterWorkflowsRoutes(protected)
 	route.RegisterGroupConfig(protected)
-	
+	route.RegisterAssessmentRoutes(protected)
+	route.RegisterTeamsRoutes(protected)
+
 }
